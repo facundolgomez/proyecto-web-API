@@ -10,19 +10,18 @@ namespace Domain.Entities
 {
     public abstract class Usuario
     {
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
         [Key]
-        [EmailAddress]
-        public string Email { get; set; }
-        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string NombreUsuario { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Contraseña { get; set; } = string.Empty; 
+        public string Direccion { get; set; } = string.Empty;
 
-        public Usuario(string nombre, string apellido, string email)
-        {
-            Nombre = nombre;
-            Apellido = apellido;
-            Email = email;
-        }
+
+
 
 
 

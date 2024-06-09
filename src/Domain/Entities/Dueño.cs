@@ -8,11 +8,8 @@ namespace Domain.Entities
 {
     public class Dueño : Usuario
     {
+        public ICollection<Guarderia> Guarderias { get; set; } = new List<Guarderia>();
 
-        public Dueño(string nombre, string apellido, string email) : base(nombre, apellido, email)
-        {
-
-        }
 
     }
 
