@@ -21,7 +21,7 @@ namespace web.Controllers
         {
             var newObj = _dueñoService.Create(dueñoCreateRequest);
 
-            return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
+            return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] DuenoUpdateRequest subjectUpdateRequest)
@@ -71,7 +71,7 @@ namespace web.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<DuenoDto> Get([FromRoute] int id)
+        public ActionResult<DuenoDto> GetById([FromRoute] int id)
         {
             try
             {

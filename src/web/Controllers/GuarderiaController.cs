@@ -31,7 +31,7 @@ namespace web.Controllers
 
             try
             {
-                _guarderiaService.Update(id, subjectUpdateRequest);
+                _guarderiaService.Update(id, guarderiaUpdateRequest);
                 return NoContent();
             }
             catch (NotFoundException ex)

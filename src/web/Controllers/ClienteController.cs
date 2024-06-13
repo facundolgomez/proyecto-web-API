@@ -22,7 +22,7 @@ namespace web.Controllers
         {
             var newObj = _clienteService.Create(clienteCreateRequest);
 
-            return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
+            return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] ClienteUpdateRequest clienteUpdateRequest)
