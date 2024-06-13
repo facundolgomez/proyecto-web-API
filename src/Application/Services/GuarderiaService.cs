@@ -48,7 +48,8 @@ namespace Application.Services
         {
             var obj = new Guarderia();
             obj.Nombre = guarderiaCreateRequest.Nombre;
-            obj.Capacidad = guarderiaCreateRequest.Capacidad;
+            obj.Direccion = guarderiaCreateRequest.Direccion;
+            
             
             return _guarderiaRepository.Add(obj);
         }
@@ -63,7 +64,9 @@ namespace Application.Services
 
             if (guarderiaUpdateRequest.Nombre != string.Empty) obj.Nombre = guarderiaUpdateRequest.Nombre;
 
-            if (guarderiaUpdateRequest.Capacidad > 0) obj.Capacidad = guarderiaUpdateRequest.Capacidad;
+            if (guarderiaUpdateRequest.Direccion != string.Empty) obj.Direccion = guarderiaUpdateRequest.Direccion;
+
+            
 
             
 

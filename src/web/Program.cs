@@ -42,6 +42,7 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 #endregion
 
 #region Repositories
+
 builder.Services.AddScoped<IDuenoRepository, DuenoRepository>();
 builder.Services.AddScoped<IGuarderiaRepository, GuarderiaRepository>();
 #endregion
