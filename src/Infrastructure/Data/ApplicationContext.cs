@@ -16,11 +16,14 @@ namespace Infrastructure.Data
 
         public DbSet<Mascota> Mascotas { get; set; }
 
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
-        {
 
+        private readonly bool isTestingEnvironment;
+
+        public ApplicationContext(DbContextOptions<ApplicationContext> options, bool isTestingEnvironment = false) : base(options) //Acá estamos llamando al constructor de DbContext que es el que acepta las opciones
+        {
+            this.isTestingEnvironment = isTestingEnvironment;
         }
 
-        
+
     }
 }

@@ -4,6 +4,7 @@ using Application.Services;
 using Domain.Interfaces;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +15,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+Batteries_V2.Init();
+
 #region Database
 
 
-builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionString:HappyPetDBConnectionString"]));
-#endregion
+/*builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(
+    builder.Configuration["ConnectionString:DBConnectionString"], b => b.MigrationsAssembly("web")));
+#endregion*/
 
+string connectionString = builder.Configuration["ConnectionStrings:DBConnectionString"]!;
+
+// Configure the SQLite connection
+var connection = new SqliteConnection(connectionString);
+connection.Open();
+
+// Set journal mode to DELETE using PRAGMA statement
+using (var command = connection.CreateCommand())
+{
+    command.CommandText = "PRAGMA journal_mode = DELETE;";
+    command.ExecuteNonQuery();
+}
+
+builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextOptions.UseSqlite(connection));
+#endregion
 
 #region Repositories
 builder.Services.AddScoped<IDueñoRepository, DueñoRepository>();
