@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Dueño : Usuario
+    public class Dueno : Usuario
     {
         public ICollection<Guarderia> Guarderias { get; set; } = new List<Guarderia>();
 

@@ -13,7 +13,7 @@ namespace Infrastructure.Data
         
         private readonly ApplicationContext _context;
 
-        public DueñoRepository(ApplicationContext context)
+        public GuarderiaRepository(ApplicationContext context)
         {
             _context = context;
         }

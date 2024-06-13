@@ -1,31 +1,30 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Application.Interfaces;
-using Application.Models.Requests;
+﻿using Application.Interfaces;
 using Application.Models;
-using Domain.Exceptions;
+using Application.Models.Requests;
 using Domain.Entities;
+using Domain.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 namespace web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DueñoController : ControllerBase
+    public class DuenoController : ControllerBase
     {
-        private readonly IDueñoService _dueñoService;
-        public DueñoController(IDueñoService subjectService)
+        private readonly IDuenoService _dueñoService;
+        public DuenoController(IDuenoService subjectService)
         {
             _dueñoService = subjectService;
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] DueñoCreateRequest dueñoCreateRequest)
+        public IActionResult Create([FromBody] DuenoCreateRequest dueñoCreateRequest)
         {
             var newObj = _dueñoService.Create(dueñoCreateRequest);
 
             return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] DueñoUpdateRequest subjectUpdateRequest)
+        public IActionResult Update([FromRoute] int id, [FromBody] DuenoUpdateRequest subjectUpdateRequest)
         {
 
             try
@@ -56,7 +55,7 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<DueñoDto>> GetAll()
+        public ActionResult<List<DuenoDto>> GetAll()
         {
             return _dueñoService.GetAll();
         }
@@ -64,7 +63,7 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
-        public ActionResult<List<Dueño>> GetAllFullData()
+        public ActionResult<List<Dueno>> GetAllFullData()
         {
             return _dueñoService.GetAllFullData();
         }
@@ -72,7 +71,7 @@ namespace web.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<DueñoDto> Get([FromRoute] int id)
+        public ActionResult<DuenoDto> Get([FromRoute] int id)
         {
             try
             {

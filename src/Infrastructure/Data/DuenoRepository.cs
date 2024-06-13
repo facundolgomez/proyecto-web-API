@@ -8,44 +8,44 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class DueñoRepository : IDueñoRepository
+    public class DuenoRepository : IDuenoRepository
     {
         
         private readonly ApplicationContext _context;
 
-        public DueñoRepository(ApplicationContext context)
+        public DuenoRepository(ApplicationContext context)
         {
             _context = context;
         }
 
-        public Dueño Add(Dueño dueño)
+        public Dueno Add(Dueno dueno)
         {
             
-            _context.Dueños.Add(dueño);
+            _context.Duenos.Add(dueno);
             _context.SaveChanges();
-            return dueño;
+            return dueno;
         }
 
-        public void Delete(Dueño dueño)
+        public void Delete(Dueno dueno)
         {
-            _context.Remove(dueño);
+            _context.Remove(dueno);
             _context.SaveChanges();
 
         }
 
-        public List<Dueño> GetAll()
+        public List<Dueno> GetAll()
         {
-            return _context.Dueños.ToList();    
+            return _context.Duenos.ToList();    
         }
 
-        public Dueño? GetById(int id)
+        public Dueno? GetById(int id)
         {
-            return _context.Dueños.FirstOrDefault(x => x.Id == id);
+            return _context.Duenos.FirstOrDefault(x => x.Id == id);
         }
 
-        public void Update(Dueño dueño)
+        public void Update(Dueno dueno)
         {
-            _context.Update(dueño);
+            _context.Update(dueno);
             _context.SaveChanges();
 
         }

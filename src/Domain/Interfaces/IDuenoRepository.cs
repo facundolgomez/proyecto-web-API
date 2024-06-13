@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IDueñoRepository
+    public interface IDuenoRepository
     {
-        Dueño Add(Dueño dueño);
-        void Delete(Dueño dueño);
-        List<Dueño> GetAll();
-        Dueño? GetById(int id);
+        Dueno Add(Dueno dueno);
+        void Delete(Dueno dueno);
+        List<Dueno> GetAll();
+        Dueno? GetById(int id);
         void SaveChanges();
-        void Update(Dueño dueño);
+        void Update(Dueno dueno);
         
     }
 }

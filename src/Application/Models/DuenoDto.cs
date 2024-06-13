@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Models
 {
-    public class DueñoDto
+    public class DuenoDto
     {
         public int Id { get; set; }
 
@@ -15,20 +15,20 @@ namespace Application.Models
 
         public string Apellido { get; set; } = string.Empty;
 
-        public static DueñoDto Create(Dueño dueño)
+        public static DuenoDto Create(Dueno dueno)
         {
-            var dto = new DueñoDto();
-            dto.Id = dueño.Id;
-            dto.Nombre = dueño.Nombre;
-            dto.Apellido = dueño.Apellido;
+            var dto = new DuenoDto();
+            dto.Id = dueno.Id;
+            dto.Nombre = dueno.Nombre;
+            dto.Apellido = dueno.Apellido;
 
             return dto;
         }
 
-        public static List<DueñoDto> CreateList(IEnumerable<Dueño> dueños)
+        public static List<DuenoDto> CreateList(IEnumerable<Dueno> duenos)
         {
-            List<DueñoDto> listDto = [];
-            foreach (var s in dueños)
+            List<DuenoDto> listDto = [];
+            foreach (var s in duenos)
             {
                 listDto.Add(Create(s));
             }

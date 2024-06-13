@@ -10,7 +10,7 @@ namespace Infrastructure.Data
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Dueño> Dueños { get; set; }
+        public DbSet<Dueno> Duenos { get; set; }
 
         public DbSet<Cliente> Clientes { get; set; }
 

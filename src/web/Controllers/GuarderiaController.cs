@@ -13,7 +13,7 @@ namespace web.Controllers
     public class GuarderiaController : ControllerBase 
     {
         private readonly IGuarderiaService _guarderiaService;
-        public GuarderiaController(IGuarderiaServicService guarderiaService)
+        public GuarderiaController(IGuarderiaService guarderiaService)
         {
             _guarderiaService = guarderiaService;
         }

@@ -42,11 +42,13 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 #endregion
 
 #region Repositories
-builder.Services.AddScoped<IDueñoRepository, DueñoRepository>();
+builder.Services.AddScoped<IDuenoRepository, DuenoRepository>();
+builder.Services.AddScoped<IGuarderiaRepository, GuarderiaRepository>();
 #endregion
 
 #region Services
-builder.Services.AddScoped<IDueñoService, DueñoService>();
+builder.Services.AddScoped<IDuenoService, DuenoService>();
+builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();  
 #endregion
 
 

@@ -13,14 +13,14 @@ namespace Application.Models
 
         public string Nombre { get; set; } = string.Empty;
 
-        public string Capacidad { get; set; };
+        
 
         public static GuarderiaDto Create(Guarderia guarderia)
         {
             var dto = new GuarderiaDto();
             dto.Id = guarderia.Id;
             dto.Nombre = guarderia.Nombre;
-            dto.Apellido = guarderia.Capacidad;
+            
 
             return dto;
         }

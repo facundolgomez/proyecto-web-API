@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Domain.Entities
 {
     public abstract class Usuario
@@ -17,7 +18,7 @@ namespace Domain.Entities
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Contraseña { get; set; } = string.Empty; 
+        public string Contrasena { get; set; } = string.Empty; 
         public string Direccion { get; set; } = string.Empty;
 
 

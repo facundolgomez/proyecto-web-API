@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IDueñoService
+    public interface IDuenoService
     {
-        Dueño Create(DueñoCreateRequest dueñoCreateRequest);
+        Dueno Create(DuenoCreateRequest duenoCreateRequest);
         void Delete(int id);
-        List<DueñoDto> GetAll();
-        List<Dueño> GetAllFullData();
-        DueñoDto GetById(int id);
-        void Update(int id, DueñoUpdateRequest dueñoUpdateRequest);
+        List<DuenoDto> GetAll();
+        List<Dueno> GetAllFullData();
+        DuenoDto GetById(int id);
+        void Update(int id, DuenoUpdateRequest duenoUpdateRequest);
     }
 }
