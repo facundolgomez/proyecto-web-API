@@ -14,9 +14,9 @@ namespace Application.Services
 {
     public class GuarderiaService : IGuarderiaService 
     {
-         private readonly IGuarderiaRepository _guarderiaRepository;
+         private readonly IRepository<Guarderia> _guarderiaRepository;
 
-        public GuarderiaService(IGuarderiaRepository repository)
+        public GuarderiaService(IRepository<Guarderia> repository)
         {
             _guarderiaRepository = repository;
         }
@@ -60,7 +60,7 @@ namespace Application.Services
             var obj = _guarderiaRepository.GetById(id);
 
             if (obj == null)
-                throw new NotFoundException(nameof(guarderia), id);
+                throw new NotFoundException(nameof(Guarderia), id);
 
             if (guarderiaUpdateRequest.Nombre != string.Empty) obj.Nombre = guarderiaUpdateRequest.Nombre;
 
@@ -87,4 +87,3 @@ namespace Application.Services
     }
 
     }
-}

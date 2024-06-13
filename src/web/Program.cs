@@ -43,15 +43,15 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 
 #region Repositories
 
-builder.Services.AddScoped<IDuenoRepository, DuenoRepository>();
-builder.Services.AddScoped<IGuarderiaRepository, GuarderiaRepository>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(IRepository<>));
+
 #endregion
 
 #region Services
-builder.Services.AddScoped<IDuenoService, DuenoService>();
-builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();  
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IDuenoService, DuenoService>();
+builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
+
 #endregion
 
 

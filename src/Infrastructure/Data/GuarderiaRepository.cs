@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class GuarderiaRepository : IGuarderiaRepository
+    public class GuarderiaRepository : IRepository<Guarderia>
     {
         
         private readonly ApplicationContext _context;

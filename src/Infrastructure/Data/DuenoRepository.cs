@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class DuenoRepository : IDuenoRepository
+    public class DuenoRepository : IRepository<Dueno>
     {
         
         private readonly ApplicationContext _context;

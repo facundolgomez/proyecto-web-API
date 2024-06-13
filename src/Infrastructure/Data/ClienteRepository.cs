@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class ClienteRepository : IClienteRepository
+    public class ClienteRepository : IRepository<Cliente>
     {
 
         private readonly ApplicationContext _context;

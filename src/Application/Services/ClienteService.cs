@@ -15,8 +15,8 @@ namespace Application.Services
 {
     public class ClienteService : IClienteService
     {
-        private readonly IClienteRepository _clienteRepository;
-        public ClienteService(IClienteRepository repository)
+        private readonly IRepository<Cliente> _clienteRepository;
+        public ClienteService(IRepository<Cliente> repository)
         {
             _clienteRepository = repository;
         }

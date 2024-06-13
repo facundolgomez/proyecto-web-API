@@ -14,9 +14,9 @@ namespace Application.Services
 {
     public class DuenoService : IDuenoService
     {
-        private readonly IDuenoRepository _duenoRepository;
+        private readonly IRepository<Dueno> _duenoRepository;
 
-        public DuenoService(IDuenoRepository repository)
+        public DuenoService(IRepository<Dueno> repository)
         {
             _duenoRepository = repository;
         }

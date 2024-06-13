@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Application.Models
 {
     public class GuarderiaDto
@@ -25,7 +26,7 @@ namespace Application.Models
             return dto;
         }
 
-        public static List<GuarderiaDto> CreateList(IEnumerable<guarderia> guarderias)
+        public static List<GuarderiaDto> CreateList(IEnumerable<Guarderia> guarderias)
         {
             List<GuarderiaDto> listDto = [];
             foreach (var s in guarderias)
