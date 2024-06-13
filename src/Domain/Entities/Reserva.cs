@@ -13,6 +13,11 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; } 
-       
+
+        public Guarderia Guarderia { get; set; } //propiedad de navegacion
+        public int GuarderiaId { get; set; }
+        public int MascotaId { get; set; }
+        public Mascota Mascota { get; set; }
+
     }
 }

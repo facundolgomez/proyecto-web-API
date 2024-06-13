@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,9 +13,21 @@ namespace Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } 
-        public string Raza { get; set; } = string.Empty;
-        public string Nombre { get; set; } = string.Empty;
+        public int MascotaId { get; set; }
+        public Cliente Cliente { get; set; } //propiedad de navegacion,
+                                             // permite acceder a la entidad Cliente
+                                             //desde una instancia de mascota
+        [Required]
+        public string Nombre { get; set; } = string.Empty;  
+       
+
+        public int ClienteId { get; set; }
+
+        [Required]        
+        public TipoMascota tipoMascota { get; set; }
+
+        public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
     }
+}
 
 }
