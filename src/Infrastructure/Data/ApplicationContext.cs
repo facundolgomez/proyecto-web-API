@@ -16,6 +16,8 @@ namespace Infrastructure.Data
 
         public DbSet<Mascota> Mascotas { get; set; }
 
+        public DbSet<Guarderia> Guarderias { get; set; }
+
 
         private readonly bool isTestingEnvironment;
 
