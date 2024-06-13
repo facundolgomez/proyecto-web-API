@@ -63,7 +63,7 @@ namespace Application.Services
 
             if (guarderiaUpdateRequest.Nombre != string.Empty) obj.Nombre = guarderiaUpdateRequest.Nombre;
 
-            if (guarderiaUpdateRequest.Capacidad != 0) obj.Capacidad = guarderiaUpdateRequest.Capacidad;
+            if (guarderiaUpdateRequest.Capacidad > 0) obj.Capacidad = guarderiaUpdateRequest.Capacidad;
 
             
 
