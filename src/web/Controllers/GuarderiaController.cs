@@ -12,8 +12,9 @@ namespace web.Controllers
     [ApiController]
     public class GuarderiaController : ControllerBase 
     {
-        private readonly IGuarderiaService _guarderiaService;
-        public GuarderiaController(IGuarderiaService guarderiaService)
+        private readonly IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> _guarderiaService;
+
+        public GuarderiaController(IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> guarderiaService)
         {
             _guarderiaService = guarderiaService;
         }

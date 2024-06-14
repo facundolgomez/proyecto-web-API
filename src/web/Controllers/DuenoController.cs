@@ -10,16 +10,17 @@ namespace web.Controllers
     [ApiController]
     public class DuenoController : ControllerBase
     {
-        private readonly IDuenoService _dueñoService;
-        public DuenoController(IDuenoService subjectService)
+        private readonly IService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _duenoService;
+
+        public DuenoController(IService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> duenoService)
         {
-            _dueñoService = subjectService;
+            _duenoService = duenoService;
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] DuenoCreateRequest dueñoCreateRequest)
         {
-            var newObj = _dueñoService.Create(dueñoCreateRequest);
+            var newObj = _duenoService.Create(dueñoCreateRequest);
 
             return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
@@ -29,7 +30,7 @@ namespace web.Controllers
 
             try
             {
-                _dueñoService.Update(id, subjectUpdateRequest);
+                _duenoService.Update(id, subjectUpdateRequest);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -44,7 +45,7 @@ namespace web.Controllers
         {
             try
             {
-                _dueñoService.Delete(id);
+                _duenoService.Delete(id);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -57,15 +58,15 @@ namespace web.Controllers
         [HttpGet]
         public ActionResult<List<DuenoDto>> GetAll()
         {
-            return _dueñoService.GetAll();
+            return _duenoService.GetAll();
         }
 
 
 
         [HttpGet("[action]")]
-        public ActionResult<List<Dueno>> GetAllFullData()
+        public ActionResult<List<Guarderia>> GetAllFullData()
         {
-            return _dueñoService.GetAllFullData();
+            return _duenoService.GetAllFullData();
         }
 
 
@@ -75,7 +76,7 @@ namespace web.Controllers
         {
             try
             {
-                return _dueñoService.GetById(id);
+                return _duenoService.GetById(id);
             }
             catch (NotFoundException ex)
             {

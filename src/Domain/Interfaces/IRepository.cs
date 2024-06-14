@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class //interfaz que debe ser implementada en el repositorio generico
     {
         T Add(T entity);
         void Delete(T entity);  

@@ -11,11 +11,13 @@ namespace web.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
-        public ClienteController(IClienteService clienteService)
+        private readonly IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _clienteService;
+
+        public ClienteController(IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> clienteService)
         {
             _clienteService = clienteService;
         }
+
 
         [HttpPost]
         public IActionResult Create([FromBody] ClienteCreateRequest clienteCreateRequest)

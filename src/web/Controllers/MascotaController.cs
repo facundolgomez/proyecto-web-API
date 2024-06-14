@@ -12,8 +12,9 @@ namespace web.Controllers
     [ApiController]
     public class MascotaController : ControllerBase
     {
-        private readonly IMascotaService _mascotaService;
-        public MascotaController(IMascotaService mascotaService)
+        private readonly IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> _mascotaService;
+
+        public MascotaController(IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> mascotaService)
         {
             _mascotaService = mascotaService;
         }
@@ -23,7 +24,7 @@ namespace web.Controllers
         {
             var newObj = _mascotaService.Create(mascotaCreateRequest);
 
-            return CreatedAtAction(nameof(Get), new { id = newObj.MascotaId }, newObj);
+            return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] MascotaUpdateRequest mascotaUpdateRequest)

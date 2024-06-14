@@ -5,6 +5,10 @@ using Domain.Interfaces;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using Application.Models.Requests;
+using Application.Models;
+using Domain.Entities;
+using Application.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,17 +47,23 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 
 #region Repositories
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(IRepository<>));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 #endregion
 
 #region Services
-builder.Services.AddScoped<IClienteService, ClienteService>();
-builder.Services.AddScoped<IDuenoService, DuenoService>();
-builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
-builder.Services.AddScoped<IMascotaService, MascotaService>();
+builder.Services.AddScoped(typeof(IService<,,,>), typeof(GenericService<,,,>));
+
+builder.Services.AddScoped(typeof(IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>), typeof(GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>));
+builder.Services.AddScoped(typeof(IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>), typeof(GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>));
+builder.Services.AddScoped(typeof(IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>), typeof(GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>));
+builder.Services.AddScoped(typeof(IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>), typeof(GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>));
+
 
 #endregion
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 
 var app = builder.Build();

@@ -13,7 +13,7 @@ namespace Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int MascotaId { get; set; }
+        public int Id { get; set; }
         public Cliente Cliente { get; set; } //propiedad de navegacion,
                                              // permite acceder a la entidad Cliente
                                              //desde una instancia de mascota

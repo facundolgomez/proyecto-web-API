@@ -12,65 +12,76 @@ namespace Infrastructure.Data
     public class ApplicationContext : DbContext
     {
         private readonly bool isTestingEnvironment;
-        public ApplicationContext(DbContextOptions<ApplicationContext> options, bool isTestingEnvironment = false) : base(options) //Acá estamos llamando al constructor de DbContext que es el que acepta las opciones
+
+        public ApplicationContext(DbContextOptions<ApplicationContext> options, bool isTestingEnvironment = false) : base(options)
         {
             this.isTestingEnvironment = isTestingEnvironment;
         }
 
         public DbSet<Dueno> Duenos { get; set; }
-
         public DbSet<Cliente> Clientes { get; set; }
-
         public DbSet<Mascota> Mascotas { get; set; }
-
         public DbSet<Guarderia> Guarderias { get; set; }
-        public DbSet<Reserva> Reservas { get; set; }    
-            
+        public DbSet<Reserva> Reservas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuración del discriminador, esto permite tener una db comun a clientes y dueños
+            // Configuración del discriminador para la entidad Usuario
             modelBuilder.Entity<Usuario>()
                 .HasDiscriminator<UserRole>("UserRole")
                 .HasValue<Dueno>(UserRole.Dueno)
                 .HasValue<Cliente>(UserRole.Cliente);
 
-            // Configuracion la entidad Cliente
+            // Configuración de la tabla para todas las entidades que heredan de Usuario
+            modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+
+            // Configuración de la entidad Cliente
             modelBuilder.Entity<Cliente>(e =>
             {
-                e.ToTable("Usuarios");
                 e.HasMany(c => c.Mascotas)
-                 .WithOne(m => m.Cliente)
-                 .HasForeignKey(m => m.ClienteId);
+                    .WithOne(m => m.Cliente)
+                    .HasForeignKey(m => m.ClienteId);
             });
 
-            // Configuracion de la entidad Mascota
+            // Configuración de la entidad Mascota
             modelBuilder.Entity<Mascota>(e =>
             {
-                e.ToTable("Mascotas");
+                e.HasOne(m => m.Cliente)
+                    .WithMany(c => c.Mascotas)
+                    .HasForeignKey(m => m.ClienteId);
                 e.HasMany(m => m.Reservas)
-                 .WithOne(r => r.Mascota)
-                 .HasForeignKey(r => r.MascotaId);
+                    .WithOne(r => r.Mascota)
+                    .HasForeignKey(r => r.MascotaId);
             });
 
-
-
+            // Configuración de la entidad Guarderia
             modelBuilder.Entity<Guarderia>(e =>
             {
-                e.ToTable("Guarderias");
                 e.HasMany(g => g.Reservas)
-                .WithOne(r => r.Guarderia)
-                .HasForeignKey(r => r.GuarderiaId);
+                    .WithOne(r => r.Guarderia)
+                    .HasForeignKey(r => r.GuarderiaId);
             });
 
-            
-            
+            // Configuración de la entidad Dueno
+            modelBuilder.Entity<Dueno>(e =>
+            {
+                e.HasMany(d => d.Guarderias)
+                    .WithOne(g => g.Dueno)
+                    .HasForeignKey(g => g.DuenoId);
+            });
 
-            base.OnModelCreating(modelBuilder); 
+            // Configuración de la entidad Reserva
+            modelBuilder.Entity<Reserva>(e =>
+            {
+                e.HasOne(r => r.Guarderia)
+                    .WithMany(g => g.Reservas)
+                    .HasForeignKey(r => r.GuarderiaId);
+                e.HasOne(r => r.Mascota)
+                    .WithMany(m => m.Reservas)
+                    .HasForeignKey(r => r.MascotaId);
+            });
+
+            base.OnModelCreating(modelBuilder);
         }
-
-
-
-
     }
-
 }

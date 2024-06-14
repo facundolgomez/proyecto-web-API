@@ -3,86 +3,47 @@ using Application.Models;
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
-using Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Application.Services
 {
-    public class MascotaService : IMascotaService
+    public class MascotaService : IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>
     {
-        private readonly IRepository<Mascota> _mascotaRepository;
+        private readonly GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> _genericService;
 
-        public MascotaService(IRepository<Mascota> repository)
+        public MascotaService(IRepository<Mascota> repository, IMapper mapper)
         {
-            _mascotaRepository = repository;
+            _genericService = new GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>(repository, mapper);
         }
 
-        public List<MascotaDto> GetAll()
+        public MascotaDto Create(MascotaCreateRequest mascotaCreateRequest)
         {
-            var list = _mascotaRepository.GetAll();
-
-            return MascotaDto.CreateList(list);
-        }
-
-        public List<Mascota> GetAllFullData()
-        {
-            return _mascotaRepository.GetAll();
-        }
-
-        public MascotaDto GetById(int id)
-        {
-            var obj = _mascotaRepository.GetById(id)
-            ?? throw new NotFoundException(nameof(Mascota), id);
-
-
-            var dto = MascotaDto.Create(obj);
-
-            return dto;
-        }
-
-        public Mascota Create(MascotaCreateRequest mascotaCreateRequest)
-        {
-            var obj = new Mascota();
-            obj.Nombre = mascotaCreateRequest.Nombre;
-            obj.tipoMascota = mascotaCreateRequest.TipoMascota;
-
-
-            return _mascotaRepository.Add(obj);
-        }
-
-        public void Update(int id, MascotaUpdateRequest mascotaUpdateRequest)
-        {
-
-            var obj = _mascotaRepository.GetById(id);
-
-            if (obj == null)
-                throw new NotFoundException(nameof(Mascota), id);
-
-            if (mascotaUpdateRequest.Nombre != string.Empty) obj.Nombre = mascotaUpdateRequest.Nombre;
-
-
-
-
-
-
-            _mascotaRepository.Update(obj);
-
+            return _genericService.Create(mascotaCreateRequest);
         }
 
         public void Delete(int id)
         {
-            var obj = _mascotaRepository.GetById(id);
-
-            if (obj == null)
-                throw new NotFoundException(nameof(Mascota), id);
-
-            _mascotaRepository.Delete(obj);
+            _genericService.Delete(id);
         }
 
-    }
+        public List<MascotaDto> GetAll()
+        {
+            return _genericService.GetAll();
+        }
 
+        public List<Mascota> GetAllFullData()
+        {
+            return _genericService.GetAllFullData();
+        }
+
+        public MascotaDto GetById(int id)
+        {
+            return _genericService.GetById(id);
+        }
+
+        public void Update(int id, MascotaUpdateRequest mascotaUpdateRequest)
+        {
+            _genericService.Update(id, mascotaUpdateRequest);
+        }
+    }
 }
