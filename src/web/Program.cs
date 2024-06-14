@@ -51,6 +51,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(IRepository<>));
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IDuenoService, DuenoService>();
 builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
+builder.Services.AddScoped<IMascotaService, MascotaService>();
 
 #endregion
 
