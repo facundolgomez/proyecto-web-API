@@ -10,9 +10,9 @@ namespace web.Controllers
     [ApiController]
     public class DuenoController : ControllerBase
     {
-        private readonly IService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _duenoService;
+        private readonly IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _duenoService;
 
-        public DuenoController(IService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> duenoService)
+        public DuenoController(IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> duenoService)
         {
             _duenoService = duenoService;
         }
@@ -64,7 +64,7 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
-        public ActionResult<List<Guarderia>> GetAllFullData()
+        public ActionResult<List<Dueno>> GetAllFullData()
         {
             return _duenoService.GetAllFullData();
         }

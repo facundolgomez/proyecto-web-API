@@ -16,6 +16,7 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
+        
         public string NombreUsuario { get; set; } = string.Empty;
         
         public string Nombre { get; set; } = string.Empty;

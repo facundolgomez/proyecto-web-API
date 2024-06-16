@@ -15,15 +15,15 @@ namespace Application.Models
 
         public string Nombre { get; set; } = string.Empty;
 
-        public TipoMascota tipoMascota { get; set; }
-        public object MascotaId { get; set; }
+        public TipoMascota TipoMascota { get; set; }
+        
 
         public static MascotaDto Create(Mascota mascota)
         {
             var dto = new MascotaDto();
             dto.Id = mascota.Id;
             dto.Nombre = mascota.Nombre;
-            dto.tipoMascota = mascota.tipoMascota;
+            dto.TipoMascota = mascota.TipoMascota;
 
 
             return dto;

@@ -115,7 +115,8 @@ namespace Infrastructure.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_MascotaId",
                 table: "Reservas",
-                column: "MascotaId");
+                column: "MascotaId",
+                unique: true);
         }
 
         /// <inheritdoc />

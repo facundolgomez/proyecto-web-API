@@ -11,7 +11,7 @@ namespace Application.Models.Requests
     {
         public string Nombre { get; set; } = string.Empty;
 
-        public TipoMascota TipoMascota { get; set; }
+        public TipoMascota TipoMascota { get; set; } 
 
     }
 }

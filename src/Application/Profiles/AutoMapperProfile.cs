@@ -10,13 +10,15 @@ namespace Application.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<ClienteCreateRequest, Cliente>();
+            //cuando AutoMapper encuentra un objeto ClienteCreateRequest debe mapearlo a un entidad Cliente
+            //asi funciona desde cada origen a destino
+            CreateMap<ClienteCreateRequest, Cliente>(); 
             CreateMap<ClienteUpdateRequest, Cliente>();
             CreateMap<Cliente, ClienteDto>();
             
-            CreateMap<DuenoCreateRequest, Guarderia>();
-            CreateMap<DuenoUpdateRequest, Guarderia>();
-            CreateMap<Guarderia, DuenoDto>();
+            CreateMap<DuenoCreateRequest, Dueno>();
+            CreateMap<DuenoUpdateRequest, Dueno>();
+            CreateMap<Dueno, DuenoDto>();
 
             CreateMap<GuarderiaCreateRequest, Guarderia>();
             CreateMap<GuarderiaUpdateRequest, Guarderia>();

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240616000202_InitialMigration")]
+    [Migration("20240616051445_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -82,7 +82,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("GuarderiaId");
 
-                    b.HasIndex("MascotaId");
+                    b.HasIndex("MascotaId")
+                        .IsUnique();
 
                     b.ToTable("Reservas");
                 });
@@ -174,8 +175,8 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Mascota", "Mascota")
-                        .WithMany("Reservas")
-                        .HasForeignKey("MascotaId")
+                        .WithOne("Reserva")
+                        .HasForeignKey("Domain.Entities.Reserva", "MascotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -191,7 +192,8 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Mascota", b =>
                 {
-                    b.Navigation("Reservas");
+                    b.Navigation("Reserva")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>

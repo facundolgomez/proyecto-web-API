@@ -17,9 +17,10 @@ public class GenericService<T, TCreateRequest, TUpdateRequest, TDto> : IService<
 
     public TDto Create(TCreateRequest createRequest)
     {
-        var entity = _mapper.Map<T>(createRequest);
+        var entity = _mapper.Map<T>(createRequest); //mapea ClienteCreateRequest a una entidad cliente
         var addedEntity = _repository.Add(entity);
-        return _mapper.Map<TDto>(addedEntity);
+        var dto = _mapper.Map<TDto>(addedEntity); //mapea la entidad cliente agregada de vuelta a clienteDto para devolverla
+        return dto; 
     }
 
     public void Delete(int id)
