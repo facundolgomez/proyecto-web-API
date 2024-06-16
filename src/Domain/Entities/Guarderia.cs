@@ -18,7 +18,7 @@ namespace Domain.Entities
         public string Direccion { get; set; } = string.Empty;
         public int DuenoId { get; set; }
 
-        public  Dueno Dueno { get; set; }
+        public  Dueno Dueno { get; set; } = new Dueno();    
 
         public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
     }

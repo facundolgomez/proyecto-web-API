@@ -14,7 +14,7 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Cliente Cliente { get; set; } //propiedad de navegacion,
+        public Cliente Cliente { get; set; } = new Cliente();  //propiedad de navegacion,
                                              // permite acceder a la entidad Cliente
                                              //desde una instancia de mascota
         [Required]
@@ -26,7 +26,7 @@ namespace Domain.Entities
         [Required]        
         public TipoMascota tipoMascota { get; set; }
 
-        public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
+        public Reserva Reserva {  get; set; }   = new Reserva();    
     }
 }
 

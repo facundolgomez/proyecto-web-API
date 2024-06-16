@@ -26,59 +26,62 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuración del discriminador para la entidad Usuario
+            // configuracion del discriminador para la entidad Usuario
+            //nos permite tener una tabla (Usuarios) comun para Dueños y clientes
             modelBuilder.Entity<Usuario>()
                 .HasDiscriminator<UserRole>("UserRole")
                 .HasValue<Dueno>(UserRole.Dueno)
                 .HasValue<Cliente>(UserRole.Cliente);
 
-            // Configuración de la tabla para todas las entidades que heredan de Usuario
+            // configuracion de la tabla para todas las entidades que heredan de Usuario
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
-            // Configuración de la entidad Cliente
+            // configuracion de la entidad Cliente
             modelBuilder.Entity<Cliente>(e =>
             {
-                e.HasMany(c => c.Mascotas)
-                    .WithOne(m => m.Cliente)
-                    .HasForeignKey(m => m.ClienteId);
+                    e.HasMany(c => c.Mascotas) //un cliente tiene muchas mascotas
+                    .WithOne(m => m.Cliente) //cada mascota esta asociada a un unico cliente
+                    .HasForeignKey(m => m.ClienteId); //clave foranea para la tabla Mascotas
             });
 
-            // Configuración de la entidad Mascota
+            // configuracion de la entidad Mascota
             modelBuilder.Entity<Mascota>(e =>
             {
-                e.HasOne(m => m.Cliente)
+                    e.HasOne(m => m.Cliente)
                     .WithMany(c => c.Mascotas)
                     .HasForeignKey(m => m.ClienteId);
-                e.HasMany(m => m.Reservas)
+
+                    e.HasOne(m => m.Reserva)
                     .WithOne(r => r.Mascota)
-                    .HasForeignKey(r => r.MascotaId);
+                    .HasForeignKey<Reserva>(r => r.MascotaId);
             });
 
-            // Configuración de la entidad Guarderia
+            // configuracion de la entidad Guarderia
             modelBuilder.Entity<Guarderia>(e =>
             {
-                e.HasMany(g => g.Reservas)
+                    e.HasMany(g => g.Reservas)
                     .WithOne(r => r.Guarderia)
                     .HasForeignKey(r => r.GuarderiaId);
             });
 
-            // Configuración de la entidad Dueno
+            // configuracion de la entidad Dueno
             modelBuilder.Entity<Dueno>(e =>
             {
-                e.HasMany(d => d.Guarderias)
+                    e.HasMany(d => d.Guarderias)
                     .WithOne(g => g.Dueno)
                     .HasForeignKey(g => g.DuenoId);
             });
 
-            // Configuración de la entidad Reserva
+            // configuracion de la entidad Reserva
             modelBuilder.Entity<Reserva>(e =>
             {
-                e.HasOne(r => r.Guarderia)
+                    e.HasOne(r => r.Guarderia)
                     .WithMany(g => g.Reservas)
                     .HasForeignKey(r => r.GuarderiaId);
-                e.HasOne(r => r.Mascota)
-                    .WithMany(m => m.Reservas)
-                    .HasForeignKey(r => r.MascotaId);
+
+                    e.HasOne(r => r.Mascota)
+                    .WithOne(m => m.Reserva)
+                    .HasForeignKey<Reserva>(r => r.MascotaId);
             });
 
             base.OnModelCreating(modelBuilder);
