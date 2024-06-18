@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +19,12 @@ namespace Domain.Entities
         public int GuarderiaId { get; set; }
         public int MascotaId { get; set; }
         public Mascota Mascota { get; set; }
+        public DateTime FechaDesde { get; set; }
+        public DateTime FechaHasta { get; set; }
+        public TipoMascota TipoMascota { get; set; }
+
+
+
 
     }
 }
