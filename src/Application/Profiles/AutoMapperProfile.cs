@@ -27,6 +27,10 @@ namespace Application.Profiles
             CreateMap<MascotaCreateRequest, Mascota>();
             CreateMap<MascotaUpdateRequest, Mascota>();
             CreateMap<Mascota, MascotaDto>();
+
+            CreateMap<ReservaCreateRequest, Reserva>();
+            CreateMap<ReservaUpdateRequest, Reserva>();
+            CreateMap<Reserva, ReservaDto>();
         }
     }
 }
