@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace Application.Services
 {
-    public class DuenoService : IService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>
+    public class DuenoService : IDuenoService
     {
         private readonly GenericService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
 
@@ -44,6 +44,11 @@ namespace Application.Services
         public void Update(int id, DuenoUpdateRequest duenoUpdateRequest)
         {
             _genericService.Update(id, duenoUpdateRequest);
+        }
+
+        public async Task AceptarReserva(int id)
+        {
+            return await
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Domain.Entities
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public TipoMascota TipoMascota { get; set; }
-        public string Estado { get; set; }
+        public EstadoReserva Estado { get; set; }
 
 
 
