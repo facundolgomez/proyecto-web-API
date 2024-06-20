@@ -11,12 +11,13 @@ namespace web.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _clienteService;
+        private readonly IClienteService _clienteService;
 
-        public ClienteController(IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> clienteService)
+        public ClienteController(IClienteService clienteService)
         {
             _clienteService = clienteService;
         }
+
 
 
         [HttpPost]
@@ -57,7 +58,7 @@ namespace web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public ActionResult<List<ClienteDto>> GetAll()
         {
             return _clienteService.GetAll();
@@ -79,6 +80,20 @@ namespace web.Controllers
             try
             {
                 return _clienteService.GetById(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPost("{clienteId}/asignar-mascota/{mascotaId}")]
+        public IActionResult AsignarMascota([FromRoute] int clienteId, [FromRoute] int mascotaId)
+        {
+            try
+            {
+                _clienteService.AsignarMascota(clienteId, mascotaId);
+                return NoContent();
             }
             catch (NotFoundException ex)
             {

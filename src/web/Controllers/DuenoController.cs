@@ -55,7 +55,7 @@ namespace web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public ActionResult<List<DuenoDto>> GetAll()
         {
             return _duenoService.GetAll();

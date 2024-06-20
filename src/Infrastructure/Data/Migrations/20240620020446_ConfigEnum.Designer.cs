@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240620020446_ConfigEnum")]
+    partial class ConfigEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -57,9 +60,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int?>("ReservaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TipoMascota")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TipoMascota")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -86,9 +88,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("MascotaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TipoMascota")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TipoMascota")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

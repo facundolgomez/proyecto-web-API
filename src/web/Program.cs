@@ -9,8 +9,16 @@ using Application.Models.Requests;
 using Application.Models;
 using Domain.Entities;
 using Application.Profiles;
+using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // Add services to the container.
 
@@ -47,7 +55,7 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 
 #region Repositories
 
-
+//configuracion del repositorio generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 #endregion
@@ -55,15 +63,10 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 #region Services
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(GenericService<,,,>));
 
-builder.Services.AddScoped(typeof(IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>), typeof(GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>));
-builder.Services.AddScoped(typeof(IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>), typeof(GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>));
-builder.Services.AddScoped(typeof(IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>), typeof(GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>));
-builder.Services.AddScoped(typeof(IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>), typeof(GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>));
-
-
+builder.Services.AddScoped<IClienteService, ClienteService>();
 #endregion
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //configuracion del automapper
 
 
 var app = builder.Build();

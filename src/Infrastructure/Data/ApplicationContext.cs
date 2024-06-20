@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data
 {
@@ -44,6 +45,13 @@ namespace Infrastructure.Data
                     .HasForeignKey(m => m.ClienteId); //clave foranea para la tabla Mascotas
             });
 
+            
+            //me convierte el tipo enum a string para el tipo de mascota (gato o perro)
+            var tipoMascotaConverter = new EnumToStringConverter<TipoMascota>();
+            modelBuilder.Entity<Mascota>()
+                .Property(e => e.TipoMascota)
+                .HasConversion(tipoMascotaConverter);
+
             // configuracion de la entidad Mascota
             modelBuilder.Entity<Mascota>(e =>
             {
@@ -73,6 +81,12 @@ namespace Infrastructure.Data
             });
 
             // configuracion de la entidad Reserva
+
+            var tipoMascotaConverter2 = new EnumToStringConverter<TipoMascota>();
+            modelBuilder.Entity<Reserva>()
+                .Property(e => e.TipoMascota)
+                .HasConversion(tipoMascotaConverter2);
+
             modelBuilder.Entity<Reserva>(e =>
             {
                     e.HasOne(r => r.Guarderia)

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240620025254_ConfigContext2")]
+    partial class ConfigContext2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -80,15 +83,14 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("FechaHasta")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("GuarderiaId")
+                    b.Property<int?>("GuarderiaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MascotaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TipoMascota")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TipoMascota")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -182,9 +184,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Guarderia", "Guarderia")
                         .WithMany("Reservas")
-                        .HasForeignKey("GuarderiaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GuarderiaId");
 
                     b.HasOne("Domain.Entities.Mascota", "Mascota")
                         .WithOne("Reserva")

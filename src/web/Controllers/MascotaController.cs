@@ -24,7 +24,7 @@ namespace web.Controllers
         {
             var newObj = _mascotaService.Create(mascotaCreateRequest);
 
-            return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
+            return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] MascotaUpdateRequest mascotaUpdateRequest)
@@ -57,7 +57,7 @@ namespace web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public ActionResult<List<MascotaDto>> GetAll()
         {
             return _mascotaService.GetAll();
@@ -74,7 +74,7 @@ namespace web.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<MascotaDto> Get([FromRoute] int id)
+        public ActionResult<MascotaDto> GetById([FromRoute] int id)
         {
             try
             {
