@@ -20,7 +20,10 @@ namespace Domain.Entities
         public int MascotaId { get; set; }
         public DateTime FechaDesde { get; set; }
         public DateTime FechaHasta { get; set; }
+        public string Titulo { get; set; }
+        public string Descripcion { get; set; }
         public TipoMascota TipoMascota { get; set; }
+        public string Estado { get; set; }
 
 
 

@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Application.Models.Requests;
 using Domain.Entities;
+using Domain.Enums;
 using System.Collections.Generic;
 
 namespace Application.Interfaces
@@ -11,5 +12,7 @@ namespace Application.Interfaces
     public interface IClienteService : IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>
     {
         void AsignarMascota(int clienteId, int mascotaId);
+        Reserva SolicitarReserva(int clienteId, int reservaId, TipoMascota tipoMascota);
+        void CancelarReserva(int reservaId);
     }
 }

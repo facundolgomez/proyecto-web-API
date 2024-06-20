@@ -16,6 +16,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
+        public float Precio { get; set; }   
         public int DuenoId { get; set; }
 
         public  Dueno Dueno { get; set; } = new Dueno();    
