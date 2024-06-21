@@ -4,16 +4,21 @@ using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
 using AutoMapper;
+using Domain.Exceptions;
+using Domain.Enums;
 
 namespace Application.Services
 {
     public class DuenoService : IDuenoService
     {
-        private readonly GenericService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
-
-        public DuenoService(IRepository<Guarderia> repository, IMapper mapper)
+        private readonly GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
+        private readonly IRepository<Reserva> _reservaRepository;
+        private readonly IRepository<Guarderia> _guarderiaRepository;   
+        public DuenoService(IRepository<Dueno> repository, IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository, IMapper mapper)
         {
-            _genericService = new GenericService<Guarderia, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>(repository, mapper);
+            _genericService = new GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>(repository, mapper);
+            _reservaRepository = reservaRepository;
+            _guarderiaRepository = guarderiaRepository;
         }
 
         public DuenoDto Create(DuenoCreateRequest duenoCreateRequest)
@@ -31,7 +36,7 @@ namespace Application.Services
             return _genericService.GetAll();
         }
 
-        public List<Guarderia> GetAllFullData()
+        public List<Dueno> GetAllFullData()
         {
             return _genericService.GetAllFullData();
         }
@@ -46,9 +51,50 @@ namespace Application.Services
             _genericService.Update(id, duenoUpdateRequest);
         }
 
-        public async Task AceptarReserva(int id)
+        
+        
+        public void AceptarReserva(int reservaId)
         {
-            return await
+            var reserva = _reservaRepository.GetById(reservaId);
+            if (reserva == null)
+            {
+                throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
+
+            }
+            reserva.Estado = EstadoReserva.Aprobada;
+            _reservaRepository.Update(reserva);
         }
+
+        public void CancelarReserva(int reservaId)
+        {
+            var reserva = _reservaRepository.GetById(reservaId);
+            if (reserva == null)
+            {
+                throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
+
+            }
+
+            reserva.Estado = EstadoReserva.Rechazada;
+            _reservaRepository.Update(reserva);
+
+
+
+        }
+
+        public List<Reserva> ListarReservasPendientes(int guarderiaId)
+        {
+            var guarderia =  _guarderiaRepository.GetById(guarderiaId);
+            if (guarderia == null)
+            {
+                throw new NotFoundException($"No se encontró la guarderia con el id {guarderiaId}");
+
+            }
+            
+            var reservasPendientes = guarderia.Reservas
+                .Where(r => r.Estado == EstadoReserva.EsperandoRespuesta)
+                .ToList();
+            return reservasPendientes;
+        }
+
     }
 }

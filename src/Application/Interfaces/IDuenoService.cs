@@ -12,9 +12,8 @@ namespace Application.Interfaces
 {
     public interface IDuenoService : IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>
     {
-        Task AceptarReserva(int reservaId);
-        Task RechazarReserva(int reservaId);
-        Task CambiarEstadoReserva(int reservaId, EstadoReserva nuevoEstado);
+        void AceptarReserva(int reservaId);
+        void CancelarReserva(int reservaId);
         List<Reserva> ListarReservasPendientes(int guarderiaId); 
     }
 }

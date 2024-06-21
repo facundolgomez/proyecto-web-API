@@ -3,6 +3,7 @@ using Application.Models;
 using Application.Models.Requests;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Interfaces;
 
@@ -12,11 +13,14 @@ namespace Application.Services
     {
         private readonly GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _genericService;
         private readonly IRepository<Mascota> _mascotaRepository;
+        private readonly IRepository<Reserva> _reservaRepository;
 
-        public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository, IMapper mapper)
+
+        public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository, IRepository<Reserva> reservaRepository, IMapper mapper)
         {
             _genericService = new GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>(repository, mapper);
             _mascotaRepository = mascotaRepository;
+            _reservaRepository = reservaRepository; 
         }
 
         public ClienteDto Create(ClienteCreateRequest clienteCreateRequest)
@@ -49,6 +53,7 @@ namespace Application.Services
             _genericService.Update(id, clienteUpdateRequest);
         }
 
+        //aca arrancan los metodos especificos (no genericos) de la entidad Cliente
         public void AsignarMascota(int clienteId, int mascotaId)
         {
             var cliente = _genericService.GetById(clienteId);
@@ -64,5 +69,46 @@ namespace Application.Services
             _mascotaRepository.Update(mascota);
 
         }
+
+        public Reserva SolicitarReserva(int clienteId, TipoMascota tipoMascota,
+           DateTime FechaDesde, DateTime FechaHasta, string titulo, string descripcion, EstadoReserva estado  )
+        {
+            var cliente = _genericService.GetById(clienteId);
+            if (cliente == null)
+                throw new NotFoundException($"No se encontró el cliente con el id {clienteId}");
+
+
+            var nuevaReserva = new Reserva
+            {
+                Titulo = titulo,
+                Descripcion = descripcion,
+                Estado = estado,
+                FechaDesde = FechaDesde,
+                FechaHasta = FechaHasta,
+                TipoMascota = tipoMascota,
+                
+
+            };
+
+            _reservaRepository.Add(nuevaReserva);
+            return nuevaReserva;
+
+        }
+
+        public void CancelarReserva(int reservaId)
+        {
+            var reserva = _reservaRepository.GetById(reservaId);
+            if (reserva == null)
+            {
+                throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
+                
+            }
+
+            _reservaRepository.Delete(reserva);
+
+
+
+        }
+
     }
 }
