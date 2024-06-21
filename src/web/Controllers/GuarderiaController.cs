@@ -5,6 +5,7 @@ using Application.Models.Requests;
 using Application.Models;
 using Domain.Exceptions;
 using Domain.Entities;
+using Application.Services;
 
 namespace web.Controllers 
 {
@@ -12,9 +13,9 @@ namespace web.Controllers
     [ApiController]
     public class GuarderiaController : ControllerBase 
     {
-        private readonly IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> _guarderiaService;
+        private readonly IGuarderiaService _guarderiaService;
 
-        public GuarderiaController(IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> guarderiaService)
+        public GuarderiaController(IGuarderiaService guarderiaService)
         {
             _guarderiaService = guarderiaService;
         }
@@ -79,6 +80,20 @@ namespace web.Controllers
             try
             {
                 return _guarderiaService.GetById(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPut("{guarderiaId}/asignar-reserva/{reservaId}")]
+        public IActionResult AsignarReserva([FromRoute] int guarderiaId, [FromRoute] int reservaId)
+        {
+            try
+            {
+                _guarderiaService.AsignarReserva(guarderiaId, reservaId);
+                return NoContent();
             }
             catch (NotFoundException ex)
             {

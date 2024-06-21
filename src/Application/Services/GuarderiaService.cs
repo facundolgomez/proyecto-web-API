@@ -4,16 +4,18 @@ using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
 using AutoMapper;
+using Domain.Exceptions;
 
 namespace Application.Services
 {
-    public class GuarderiaService : IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>
+    public class GuarderiaService : IGuarderiaService
     {
         private readonly GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> _genericService;
-
-        public GuarderiaService(IRepository<Guarderia> repository, IMapper mapper)
+        private readonly IRepository<Reserva> _reservaRepository;
+        public GuarderiaService(IRepository<Guarderia> repository,IRepository<Reserva> reservaRepository, IMapper mapper)
         {
             _genericService = new GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>(repository, mapper);
+            _reservaRepository = reservaRepository;
         }
 
         public GuarderiaDto Create(GuarderiaCreateRequest guarderiaCreateRequest)
@@ -44,6 +46,22 @@ namespace Application.Services
         public void Update(int id, GuarderiaUpdateRequest guarderiaUpdateRequest)
         {
             _genericService.Update(id, guarderiaUpdateRequest);
+        }
+
+        public void AsignarReserva(int guarderiaId, int reservaId)
+        {
+            var guarderia = _genericService.GetById(guarderiaId);
+            if (guarderia == null)
+                throw new NotFoundException($"No se encontro la guarderia con el id {guarderiaId}");
+
+            var reserva = _reservaRepository.GetById(reservaId);
+            if (reserva == null)
+                throw new NotFoundException($"No se encontro la reserva con el id {reservaId}");
+
+           
+            reserva.GuarderiaId = guarderiaId;
+            _reservaRepository.Update(reserva);
+
         }
     }
 }

@@ -13,12 +13,14 @@ namespace Application.Services
     {
         private readonly GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
         private readonly IRepository<Reserva> _reservaRepository;
-        private readonly IRepository<Guarderia> _guarderiaRepository;   
+        private readonly IRepository<Guarderia> _guarderiaRepository;
+        private readonly IMapper _mapper;
         public DuenoService(IRepository<Dueno> repository, IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository, IMapper mapper)
         {
             _genericService = new GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>(repository, mapper);
             _reservaRepository = reservaRepository;
             _guarderiaRepository = guarderiaRepository;
+            _mapper = mapper;
         }
 
         public DuenoDto Create(DuenoCreateRequest duenoCreateRequest)
@@ -51,8 +53,8 @@ namespace Application.Services
             _genericService.Update(id, duenoUpdateRequest);
         }
 
-        
-        
+
+
         public void AceptarReserva(int reservaId)
         {
             var reserva = _reservaRepository.GetById(reservaId);
@@ -81,19 +83,26 @@ namespace Application.Services
 
         }
 
-        public List<Reserva> ListarReservasPendientes(int guarderiaId)
+        public List<ReservaDto> ListarReservasPendientes(int guarderiaId)
         {
-            var guarderia =  _guarderiaRepository.GetById(guarderiaId);
+            var guarderia = _guarderiaRepository.GetById(guarderiaId);
             if (guarderia == null)
             {
                 throw new NotFoundException($"No se encontró la guarderia con el id {guarderiaId}");
 
             }
-            
+
             var reservasPendientes = guarderia.Reservas
                 .Where(r => r.Estado == EstadoReserva.Pendiente)
                 .ToList();
-            return reservasPendientes;
+            return _mapper.Map<List<ReservaDto>>(reservasPendientes);
+        }
+
+        public GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest)
+        {
+            var nuevaGuarderia = _mapper.Map<Guarderia>(guarderiaCreateRequest);
+            _guarderiaRepository.Add(nuevaGuarderia);
+            return _mapper.Map<GuarderiaDto>(nuevaGuarderia);
         }
 
     }

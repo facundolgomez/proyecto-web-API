@@ -101,7 +101,33 @@ namespace web.Controllers
             }
         }
 
+        [HttpPost("{clienteId}/solicitar-reserva/")]
+        public IActionResult SolicitarReserva([FromRoute] int clienteId, [FromBody] ReservaCreateRequest reservaCreateRequest)
+        {
+            try
+            {
+                var newObj = _clienteService.SolicitarReserva(clienteId, reservaCreateRequest);
+                return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
+        [HttpPut("{reservaId}/cancelar-reserva/")]
+        public IActionResult CancelarReserva([FromRoute] int reservaId)
+        {
+            try
+            {
+                _clienteService.CancelarReserva(reservaId);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
     }
 }

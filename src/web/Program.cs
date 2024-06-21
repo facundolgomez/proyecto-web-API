@@ -64,6 +64,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(GenericService<,,,>));
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IDuenoService, DuenoService>();
+builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
 #endregion
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //configuracion del automapper

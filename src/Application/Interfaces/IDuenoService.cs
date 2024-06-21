@@ -14,6 +14,7 @@ namespace Application.Interfaces
     {
         void AceptarReserva(int reservaId);
         void CancelarReserva(int reservaId);
-        List<Reserva> ListarReservasPendientes(int guarderiaId); 
+        GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest);
+        List<ReservaDto> ListarReservasPendientes(int guarderiaId); 
     }
 }

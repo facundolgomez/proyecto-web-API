@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Requests;
+using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace web.Controllers
     [ApiController]
     public class DuenoController : ControllerBase
     {
-        private readonly IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _duenoService;
+        private readonly IDuenoService _duenoService;
 
-        public DuenoController(IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> duenoService)
+        public DuenoController(IDuenoService duenoService)
         {
             _duenoService = duenoService;
         }
@@ -84,7 +85,52 @@ namespace web.Controllers
             }
         }
 
+        [HttpPut("{reservaId}/cancelar-reserva/")]
+        public IActionResult CancelarReserva([FromRoute] int reservaId)
+        {
+            try
+            {
+                _duenoService.CancelarReserva(reservaId);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
+        [HttpPut("{reservaId}/aceptar-reserva/")]
+        public IActionResult AceptarReserva([FromRoute] int reservaId)
+        {
+            try
+            {
+                _duenoService.AceptarReserva(reservaId);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
+        [HttpPost("/crear-guarderia/")]
+        public IActionResult CrearGuarderia([FromBody] GuarderiaCreateRequest guarderiaCreateRequest)
+        {
+            try
+            {
+                var newObj = _duenoService.CrearGuarderia(guarderiaCreateRequest);
+                return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("{guarderiaId}/lista-reservas-pendientes/")]
+        public ActionResult<List<ReservaDto>> ListarReservasPendientes(int guarderiaId)
+        {
+            return _duenoService.ListarReservasPendientes(guarderiaId);
+        }
     }
 }
