@@ -14,13 +14,17 @@ namespace Application.Models
 
         public string Nombre { get; set; } = string.Empty;
 
-        
+        public string Direccion { get; set; } = string.Empty ;
+
+        public float Precio { get; set; }   
 
         public static GuarderiaDto Create(Guarderia guarderia)
         {
             var dto = new GuarderiaDto();
             dto.Id = guarderia.Id;
             dto.Nombre = guarderia.Nombre;
+            dto.Direccion = guarderia.Direccion;    
+            dto.Precio = guarderia.Precio;
             
 
             return dto;

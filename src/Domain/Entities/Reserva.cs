@@ -24,9 +24,12 @@ namespace Domain.Entities
         public string Descripcion { get; set; }
         public TipoMascota TipoMascota { get; set; }
         public EstadoReserva Estado { get; set; }
+        public int ClienteId { get; set; }
 
-
-
-
+        public Reserva()
+        {
+            Estado = EstadoReserva.Pendiente; //al crearse una reserva
+                                              //esta se inicializa en pendiente
+        }
     }
 }

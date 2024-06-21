@@ -87,7 +87,7 @@ namespace web.Controllers
             }
         }
 
-        [HttpPost("{clienteId}/asignar-mascota/{mascotaId}")]
+        [HttpPut("{clienteId}/asignar-mascota/{mascotaId}")]
         public IActionResult AsignarMascota([FromRoute] int clienteId, [FromRoute] int mascotaId)
         {
             try

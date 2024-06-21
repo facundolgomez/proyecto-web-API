@@ -87,6 +87,11 @@ namespace Infrastructure.Data
                 .Property(e => e.TipoMascota)
                 .HasConversion(tipoMascotaConverter2);
 
+            var estado = new EnumToStringConverter<EstadoReserva>();
+            modelBuilder.Entity<Reserva>()
+                .Property(e => e.Estado)
+                .HasConversion(estado);
+
             modelBuilder.Entity<Reserva>(e =>
             {
                     e.HasOne(r => r.Guarderia)

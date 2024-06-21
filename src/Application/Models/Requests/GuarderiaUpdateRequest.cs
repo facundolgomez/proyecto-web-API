@@ -12,6 +12,7 @@ namespace Application.Models.Requests
 
         public string Direccion { get; set; } = string.Empty;
 
+        public float Precio { get; set; }   
         
     }
 }

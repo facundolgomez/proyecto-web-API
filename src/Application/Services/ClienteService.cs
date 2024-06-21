@@ -14,14 +14,16 @@ namespace Application.Services
         private readonly GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _genericService;
         private readonly IRepository<Mascota> _mascotaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
-
+        private readonly IMapper _mapper;
 
         public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository, IRepository<Reserva> reservaRepository, IMapper mapper)
         {
             _genericService = new GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>(repository, mapper);
             _mascotaRepository = mascotaRepository;
-            _reservaRepository = reservaRepository; 
+            _reservaRepository = reservaRepository;
+            _mapper = mapper;
         }
+
 
         public ClienteDto Create(ClienteCreateRequest clienteCreateRequest)
         {
@@ -70,29 +72,17 @@ namespace Application.Services
 
         }
 
-        public Reserva SolicitarReserva(int clienteId, TipoMascota tipoMascota,
-           DateTime FechaDesde, DateTime FechaHasta, string titulo, string descripcion, EstadoReserva estado  )
+        public ReservaDto SolicitarReserva(int clienteId, ReservaCreateRequest reservaCreateRequest)
         {
             var cliente = _genericService.GetById(clienteId);
             if (cliente == null)
                 throw new NotFoundException($"No se encontró el cliente con el id {clienteId}");
 
-
-            var nuevaReserva = new Reserva
-            {
-                Titulo = titulo,
-                Descripcion = descripcion,
-                Estado = estado,
-                FechaDesde = FechaDesde,
-                FechaHasta = FechaHasta,
-                TipoMascota = tipoMascota,
-                
-
-            };
+            var nuevaReserva = _mapper.Map<Reserva>(reservaCreateRequest);
+            nuevaReserva.ClienteId = clienteId;
 
             _reservaRepository.Add(nuevaReserva);
-            return nuevaReserva;
-
+            return _mapper.Map<ReservaDto>(nuevaReserva);
         }
 
         public void CancelarReserva(int reservaId)
@@ -104,7 +94,8 @@ namespace Application.Services
                 
             }
 
-            _reservaRepository.Delete(reserva);
+            reserva.Estado = EstadoReserva.Rechazada;
+            _reservaRepository.Update(reserva);
 
 
 

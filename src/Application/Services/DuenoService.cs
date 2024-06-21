@@ -91,7 +91,7 @@ namespace Application.Services
             }
             
             var reservasPendientes = guarderia.Reservas
-                .Where(r => r.Estado == EstadoReserva.EsperandoRespuesta)
+                .Where(r => r.Estado == EstadoReserva.Pendiente)
                 .ToList();
             return reservasPendientes;
         }
