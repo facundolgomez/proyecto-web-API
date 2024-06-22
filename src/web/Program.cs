@@ -12,15 +12,18 @@ using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Infrastructure.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region ConfigureJsonOptions
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+#endregion
 
 // Add services to the container.
 
@@ -97,6 +100,7 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 
 //configuracion del repositorio generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 #endregion
 
@@ -106,6 +110,7 @@ builder.Services.AddScoped(typeof(IService<,,,>), typeof(GenericService<,,,>));
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IDuenoService, DuenoService>();
 builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 #endregion
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //configuracion del automapper

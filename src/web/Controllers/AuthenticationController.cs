@@ -20,7 +20,7 @@ namespace web.Controllers
             _authenticationService = autenticacionService;
         }
 
-        [HttpPost("authenticate")] 
+        [HttpPost("[action]")] 
         public ActionResult<string> Autenticar(AuthenticationRequest authenticationRequest) //Enviamos como parámetro la clase que creamos arriba
         {
             try

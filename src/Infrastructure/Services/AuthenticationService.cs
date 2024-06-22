@@ -24,7 +24,7 @@ namespace Infrastructure.Services
             _options = options.Value;
         }
 
-        private Usuario? ValidateUser(AuthenticationRequest authenticationRequest)
+        private Usuario? ValidarUsuario(AuthenticationRequest authenticationRequest)
         {
             if (string.IsNullOrEmpty(authenticationRequest.NombreUsuario) || string.IsNullOrEmpty(authenticationRequest.Contrasena)) 
                 return null;
@@ -45,13 +45,13 @@ namespace Infrastructure.Services
         {
 
             //Paso 1: Validamos las credenciales
-            var user = ValidateUser(authenticationRequest); //Lo primero que hacemos es llamar a una función que valide los parámetros que enviamos.
+            var user = ValidarUsuario(authenticationRequest); //Lo primero que hacemos es llamar a una función que valide los parámetros que enviamos.
 
             if (user == null)
             {
-                throw new UnauthorizedAccessException("User authentication failed");
+                throw new UnauthorizedAccessException("Fallo en la autenticación del usuario");
             }
-
+            
 
             //Paso 2: Crear el token
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey)); //Traemos la SecretKey del Json. agregar antes: using Microsoft.IdentityModel.Tokens;
