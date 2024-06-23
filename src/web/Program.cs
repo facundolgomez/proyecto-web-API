@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Infrastructure.Services;
+using Domain.Enums;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +39,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        Description = "Acá pegar el token generado al loguearse."
+        Description = "Introduzca el token JWT como: Bearer {token}"
     });
 
     setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -56,6 +57,9 @@ builder.Services.AddSwaggerGen(setupAction =>
         }
     });
 });
+//configurar las opciones para la clase AutenticacionServiceOptions
+builder.Services.Configure<AuthenticationService.AutenticacionServiceOptions>(
+    builder.Configuration.GetSection("Authentication"));
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
@@ -70,6 +74,15 @@ builder.Services.AddAuthentication("Bearer")
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
         };
     });
+
+
+
+// configuración de autorización basada en roles
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Dueno", policy => policy.RequireRole(UserRole.Dueno.ToString()));
+    options.AddPolicy("Cliente", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.Dueno.ToString()));
+});
 
 #endregion
 

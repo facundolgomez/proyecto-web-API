@@ -84,8 +84,9 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Estado")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("FechaDesde")
                         .HasColumnType("TEXT");
@@ -163,14 +164,44 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasBaseType("Domain.Entities.Usuario");
 
+                    b.ToTable("Usuarios", (string)null);
+
                     b.HasDiscriminator().HasValue(1);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Apellido = "",
+                            Contrasena = "9876",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
+                            NombreUsuario = "facu123",
+                            UserRole = 1
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Dueno", b =>
                 {
                     b.HasBaseType("Domain.Entities.Usuario");
 
+                    b.ToTable("Usuarios", (string)null);
+
                     b.HasDiscriminator().HasValue(0);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Apellido = "",
+                            Contrasena = "contraseña2",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
+                            NombreUsuario = "usuario2",
+                            UserRole = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Guarderia", b =>

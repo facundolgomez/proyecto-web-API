@@ -4,6 +4,7 @@ using Application.Models.Requests;
 using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace web.Controllers
 {
@@ -17,7 +18,8 @@ namespace web.Controllers
         {
             _duenoService = duenoService;
         }
-
+        
+        [Authorize(Policy = "Dueno")]
         [HttpPost]
         public IActionResult Create([FromBody] DuenoCreateRequest dueñoCreateRequest)
         {
@@ -25,6 +27,8 @@ namespace web.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
+        
+        [Authorize(Policy = "Dueno")]
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] DuenoUpdateRequest subjectUpdateRequest)
         {
@@ -41,6 +45,7 @@ namespace web.Controllers
 
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -56,6 +61,7 @@ namespace web.Controllers
 
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpGet("[action]")]
         public ActionResult<List<DuenoDto>> GetAll()
         {
@@ -63,7 +69,7 @@ namespace web.Controllers
         }
 
 
-
+        [Authorize(Policy = "Dueno")]
         [HttpGet("[action]")]
         public ActionResult<List<Dueno>> GetAllFullData()
         {
@@ -71,7 +77,7 @@ namespace web.Controllers
         }
 
 
-
+        [Authorize(Policy = "Dueno")]
         [HttpGet("{id}")]
         public ActionResult<DuenoDto> GetById([FromRoute] int id)
         {
@@ -85,6 +91,7 @@ namespace web.Controllers
             }
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpPut("{reservaId}/cancelar-reserva/")]
         public IActionResult CancelarReserva([FromRoute] int reservaId)
         {
@@ -99,6 +106,7 @@ namespace web.Controllers
             }
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpPut("{reservaId}/aceptar-reserva/")]
         public IActionResult AceptarReserva([FromRoute] int reservaId)
         {
@@ -113,6 +121,7 @@ namespace web.Controllers
             }
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpPost("/crear-guarderia/")]
         public IActionResult CrearGuarderia([FromBody] GuarderiaCreateRequest guarderiaCreateRequest)
         {
@@ -127,6 +136,7 @@ namespace web.Controllers
             }
         }
 
+        [Authorize(Policy = "Dueno")]
         [HttpGet("{guarderiaId}/lista-reservas-pendientes/")]
         public ActionResult<List<ReservaDto>> ListarReservasPendientes(int guarderiaId)
         {

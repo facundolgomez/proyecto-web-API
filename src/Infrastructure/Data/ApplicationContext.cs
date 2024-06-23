@@ -34,6 +34,13 @@ namespace Infrastructure.Data
                 .HasValue<Dueno>(UserRole.Dueno)
                 .HasValue<Cliente>(UserRole.Cliente);
 
+
+            modelBuilder.Entity<Cliente>()
+        .ToTable("Usuarios");
+
+            modelBuilder.Entity<Dueno>()
+                .ToTable("Usuarios");
+
             // configuracion de la tabla para todas las entidades que heredan de Usuario
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
@@ -102,6 +109,35 @@ namespace Infrastructure.Data
                     .WithOne(m => m.Reserva)
                     .HasForeignKey<Reserva>(r => r.MascotaId);
             });
+
+
+            
+
+            //ponemos entidades con los datos
+            //para hacer pruebas de autenticacion y probar endpoints
+
+            //ACLARACION: al loguearse no poner el prefijo Bearer antes del token
+            //poner directamente el token(creo que es porque swagger lo pone solo)
+            modelBuilder.Entity<Cliente>().HasData(
+            new Cliente
+            {
+                Id = 1,
+                NombreUsuario = "facu123",
+                Contrasena = "9876",
+                UserRole = UserRole.Cliente,
+            }
+            );
+        
+            modelBuilder.Entity<Dueno>().HasData(
+                new Dueno
+                {
+                    Id = 2,
+                    NombreUsuario = "usuario2",
+                    Contrasena = "contraseña2",
+                    UserRole = UserRole.Dueno,
+                }
+            );
+
 
             base.OnModelCreating(modelBuilder);
         }

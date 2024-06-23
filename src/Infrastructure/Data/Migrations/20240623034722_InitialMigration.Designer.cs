@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240620020915_ConfigContext")]
-    partial class ConfigContext
+    [Migration("20240623034722_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<float>("Precio")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -77,6 +80,17 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("FechaDesde")
                         .HasColumnType("TEXT");
 
@@ -89,8 +103,13 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("MascotaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TipoMascota")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("TipoMascota")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -148,14 +167,44 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasBaseType("Domain.Entities.Usuario");
 
+                    b.ToTable("Usuarios", (string)null);
+
                     b.HasDiscriminator().HasValue(1);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Apellido = "",
+                            Contrasena = "9876",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
+                            NombreUsuario = "facu123",
+                            UserRole = 1
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Dueno", b =>
                 {
                     b.HasBaseType("Domain.Entities.Usuario");
 
+                    b.ToTable("Usuarios", (string)null);
+
                     b.HasDiscriminator().HasValue(0);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Apellido = "",
+                            Contrasena = "contraseña2",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
+                            NombreUsuario = "usuario2",
+                            UserRole = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Guarderia", b =>

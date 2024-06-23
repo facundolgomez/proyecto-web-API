@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Infrastructure.Data.Migrations
 {
@@ -37,6 +40,7 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     Direccion = table.Column<string>(type: "TEXT", nullable: false),
+                    Precio = table.Column<float>(type: "REAL", nullable: false),
                     DuenoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -58,7 +62,8 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    tipoMascota = table.Column<int>(type: "INTEGER", nullable: false)
+                    ReservaId = table.Column<int>(type: "INTEGER", nullable: true),
+                    TipoMascota = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +83,14 @@ namespace Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     GuarderiaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MascotaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    MascotaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FechaDesde = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FechaHasta = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Titulo = table.Column<string>(type: "TEXT", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    TipoMascota = table.Column<string>(type: "TEXT", nullable: false),
+                    Estado = table.Column<string>(type: "TEXT", nullable: false),
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,6 +107,15 @@ namespace Infrastructure.Data.Migrations
                         principalTable: "Mascotas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Usuarios",
+                columns: new[] { "Id", "Apellido", "Contrasena", "Direccion", "Email", "Nombre", "NombreUsuario", "UserRole" },
+                values: new object[,]
+                {
+                    { 1, "", "9876", "", "", "", "facu123", 1 },
+                    { 2, "", "contraseña2", "", "", "", "usuario2", 0 }
                 });
 
             migrationBuilder.CreateIndex(
