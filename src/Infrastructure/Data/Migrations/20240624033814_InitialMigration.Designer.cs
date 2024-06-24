@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240623034722_InitialMigration")]
+    [Migration("20240624033814_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -151,14 +151,15 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserRole")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios", (string)null);
 
-                    b.HasDiscriminator<int>("UserRole");
+                    b.HasDiscriminator<string>("UserRole");
 
                     b.UseTphMappingStrategy();
                 });
@@ -169,7 +170,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.ToTable("Usuarios", (string)null);
 
-                    b.HasDiscriminator().HasValue(1);
+                    b.HasDiscriminator().HasValue("Cliente");
 
                     b.HasData(
                         new
@@ -181,7 +182,7 @@ namespace Infrastructure.Data.Migrations
                             Email = "",
                             Nombre = "",
                             NombreUsuario = "facu123",
-                            UserRole = 1
+                            UserRole = "Cliente"
                         });
                 });
 
@@ -191,7 +192,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.ToTable("Usuarios", (string)null);
 
-                    b.HasDiscriminator().HasValue(0);
+                    b.HasDiscriminator().HasValue("Dueno");
 
                     b.HasData(
                         new
@@ -203,7 +204,7 @@ namespace Infrastructure.Data.Migrations
                             Email = "",
                             Nombre = "",
                             NombreUsuario = "usuario2",
-                            UserRole = 0
+                            UserRole = "Dueno"
                         });
                 });
 

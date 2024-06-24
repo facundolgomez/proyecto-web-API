@@ -25,7 +25,7 @@ namespace Infrastructure.Data.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Contrasena = table.Column<string>(type: "TEXT", nullable: false),
                     Direccion = table.Column<string>(type: "TEXT", nullable: false),
-                    UserRole = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserRole = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,8 +114,8 @@ namespace Infrastructure.Data.Migrations
                 columns: new[] { "Id", "Apellido", "Contrasena", "Direccion", "Email", "Nombre", "NombreUsuario", "UserRole" },
                 values: new object[,]
                 {
-                    { 1, "", "9876", "", "", "", "facu123", 1 },
-                    { 2, "", "contraseña2", "", "", "", "usuario2", 0 }
+                    { 1, "", "9876", "", "", "", "facu123", "Cliente" },
+                    { 2, "", "contraseña2", "", "", "", "usuario2", "Dueno" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -34,6 +34,11 @@ namespace Infrastructure.Data
                 .HasValue<Dueno>(UserRole.Dueno)
                 .HasValue<Cliente>(UserRole.Cliente);
 
+            var tipoUsuario = new EnumToStringConverter<UserRole>();
+            modelBuilder.Entity<Usuario>()
+                .Property(e => e.UserRole)
+                .HasConversion(tipoUsuario);
+
 
             modelBuilder.Entity<Cliente>()
         .ToTable("Usuarios");
