@@ -10,18 +10,18 @@ namespace web.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        
         private readonly IAuthenticationService _authenticationService;
 
         
-        public AuthenticationController(IConfiguration config, IAuthenticationService autenticacionService)
+        public AuthenticationController(IAuthenticationService autenticacionService)
         {
-            _config = config; 
+            
             _authenticationService = autenticacionService;
         }
 
         [HttpPost("[action]")] 
-        public ActionResult<string> Autenticar(AuthenticationRequest authenticationRequest) //Enviamos como parámetro la clase que creamos arriba
+        public ActionResult<string> Autenticar([FromBody] AuthenticationRequest authenticationRequest) //Enviamos como parámetro la clase que creamos arriba
         {
             try
             {
