@@ -10,6 +10,7 @@ namespace web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "Cliente")]
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
@@ -20,7 +21,7 @@ namespace web.Controllers
         }
 
 
-        [Authorize(Policy = "Cliente")]
+        
         [HttpPost]
         public IActionResult Create([FromBody] ClienteCreateRequest clienteCreateRequest)
         {
@@ -29,7 +30,7 @@ namespace web.Controllers
             return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
 
-        [Authorize(Policy = "Cliente")]
+        
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] ClienteUpdateRequest clienteUpdateRequest)
         {
@@ -46,7 +47,6 @@ namespace web.Controllers
 
         }
 
-        [Authorize(Policy = "Cliente")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -62,7 +62,7 @@ namespace web.Controllers
 
         }
 
-        [Authorize(Policy = "Cliente")]
+
         [HttpGet("[action]")]
         public ActionResult<List<ClienteDto>> GetAll()
         {
@@ -70,7 +70,7 @@ namespace web.Controllers
         }
 
 
-        [Authorize(Policy = "Cliente")]
+
         [HttpGet("[action]")]
         public ActionResult<List<Cliente>> GetAllFullData()
         {
@@ -78,7 +78,6 @@ namespace web.Controllers
         }
 
 
-        [Authorize(Policy = "Cliente")]
         [HttpGet("{id}")]
         public ActionResult<ClienteDto> GetById([FromRoute] int id)
         {
@@ -92,7 +91,7 @@ namespace web.Controllers
             }
         }
 
-        [Authorize(Policy = "Cliente")]
+
         [HttpPut("{clienteId}/asignar-mascota/{mascotaId}")]
         public IActionResult AsignarMascota([FromRoute] int clienteId, [FromRoute] int mascotaId)
         {
@@ -107,7 +106,7 @@ namespace web.Controllers
             }
         }
 
-        [Authorize(Policy = "Cliente")]
+
         [HttpPost("{clienteId}/solicitar-reserva/")]
         public IActionResult SolicitarReserva([FromRoute] int clienteId, [FromBody] ReservaCreateRequest reservaCreateRequest)
         {
@@ -122,7 +121,7 @@ namespace web.Controllers
             }
         }
 
-        [Authorize(Policy = "Cliente")]
+
         [HttpPut("{reservaId}/cancelar-reserva/")]
         public IActionResult CancelarReserva([FromRoute] int reservaId)
         {

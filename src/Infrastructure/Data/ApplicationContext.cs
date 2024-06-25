@@ -24,6 +24,7 @@ namespace Infrastructure.Data
         public DbSet<Mascota> Mascotas { get; set; }
         public DbSet<Guarderia> Guarderias { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Notificacion> Notificaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
