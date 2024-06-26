@@ -136,6 +136,37 @@ namespace web.Controllers
             }
         }
 
+        //endpoints recien agregados
+        [HttpPost("{reservaId}/enviar-mensaje-al-dueno")]
+        public IActionResult EnviarMensajeAlDueno([FromRoute] int reservaId, [FromBody] string mensaje)
+        {
+            try
+            {
+                _clienteService.EnviarMensajeAlDueno(reservaId, mensaje);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("{clienteId}/ver-notificaciones")]
+        public ActionResult<List<NotificacionDto>> VerNotificaciones([FromRoute] int clienteId)
+        {
+            try
+            {
+                var notificaciones = _clienteService.VerNotificaciones(clienteId);
+                return Ok(notificaciones);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        
+
     }
 }
 

@@ -31,6 +31,8 @@ namespace Application.Profiles
             CreateMap<ReservaCreateRequest, Reserva>();
             CreateMap<ReservaUpdateRequest, Reserva>();
             CreateMap<Reserva, ReservaDto>();
+
+            CreateMap<Notificacion, NotificacionDto>();
         }
     }
 }

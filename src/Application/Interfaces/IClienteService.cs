@@ -16,5 +16,6 @@ namespace Application.Interfaces
         void CancelarReserva(int reservaId);
         void EnviarMensajeAlDueno(int reservaId, string mensaje);
         List<NotificacionDto> VerNotificaciones(int clienteId);
+        
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Infrastructure.Services;
 using Domain.Enums;
+using Infrastructure.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -114,6 +115,7 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 //configuracion del repositorio generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>(); 
 
 #endregion
 
@@ -124,6 +126,7 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IDuenoService, DuenoService>();
 builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<INotificacionService, NotificacionService>();
 #endregion
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //configuracion del automapper

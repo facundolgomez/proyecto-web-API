@@ -14,12 +14,14 @@ namespace Application.Services
         private readonly GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
         private readonly IRepository<Reserva> _reservaRepository;
         private readonly IRepository<Guarderia> _guarderiaRepository;
+        private readonly INotificacionRepository _notificacionRepository;
         private readonly IMapper _mapper;
-        public DuenoService(IRepository<Dueno> repository, IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository, IMapper mapper)
+        public DuenoService(IRepository<Dueno> repository, IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository, INotificacionRepository notificacionRepository, IMapper mapper)
         {
             _genericService = new GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>(repository, mapper);
             _reservaRepository = reservaRepository;
             _guarderiaRepository = guarderiaRepository;
+            _notificacionRepository = notificacionRepository;
             _mapper = mapper;
         }
 
@@ -103,6 +105,20 @@ namespace Application.Services
             var nuevaGuarderia = _mapper.Map<Guarderia>(guarderiaCreateRequest);
             _guarderiaRepository.Add(nuevaGuarderia);
             return _mapper.Map<GuarderiaDto>(nuevaGuarderia);
+        }
+
+        public void EnviarMensajeAlCliente(int reservaId, string mensaje)
+        {
+            var notificacion = _notificacionRepository.GetById(reservaId);
+            if (notificacion == null)
+            {
+                throw new NotFoundException($"No se encontró la notificacion con el id {reservaId}");
+
+            }
+            notificacion.EstadoReserva = EstadoReserva.Pendiente;
+            notificacion.Mensaje = mensaje;
+            _notificacionRepository.Update(notificacion);
+
         }
 
     }

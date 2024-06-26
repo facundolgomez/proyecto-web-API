@@ -14,13 +14,16 @@ namespace Application.Services
         private readonly GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _genericService;
         private readonly IRepository<Mascota> _mascotaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
+        private readonly INotificacionRepository _notificacionRepository; 
         private readonly IMapper _mapper;
 
-        public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository, IRepository<Reserva> reservaRepository, IMapper mapper)
+        public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository,
+            IRepository<Reserva> reservaRepository, INotificacionRepository notificacionRepository, IMapper mapper)
         {
             _genericService = new GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>(repository, mapper);
             _mascotaRepository = mascotaRepository;
             _reservaRepository = reservaRepository;
+            _notificacionRepository = notificacionRepository;   
             _mapper = mapper;
         }
 
@@ -97,9 +100,36 @@ namespace Application.Services
             reserva.Estado = EstadoReserva.Rechazada;
             _reservaRepository.Update(reserva);
 
+            
 
 
         }
+    
+
+        public void EnviarMensajeAlDueno(int reservaId, string mensaje)
+        {
+            var notificacion = _notificacionRepository.GetById(reservaId);
+            if (notificacion == null)
+            {
+                throw new NotFoundException($"No se encontró la notificacion con el id {reservaId}");
+
+            }
+            notificacion.EstadoReserva = EstadoReserva.Pendiente;
+            notificacion.Mensaje = mensaje;
+            _notificacionRepository.Update(notificacion);
+            
+
+        }
+
+        public List<NotificacionDto> VerNotificaciones(int clienteId)
+        {
+            var notificaciones = _notificacionRepository.GetByUsuarioId(clienteId);
+            return _mapper.Map<List<NotificacionDto>>(notificaciones);
+        }
+
+        
+    }
+
 
     }
-}
+
