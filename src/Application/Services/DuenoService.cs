@@ -121,5 +121,11 @@ namespace Application.Services
 
         }
 
+        public List<NotificacionDto> VerNotificaciones(int duenoId)
+        {
+            var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId);
+            return _mapper.Map<List<NotificacionDto>>(notificaciones);
+        }
+
     }
 }
