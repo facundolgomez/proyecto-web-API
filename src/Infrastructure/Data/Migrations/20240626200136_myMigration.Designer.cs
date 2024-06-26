@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240624033814_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240626200136_myMigration")]
+    partial class myMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,16 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("DuenoId");
 
                     b.ToTable("Guarderias");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Direccion = "Zeballos 1341",
+                            DuenoId = 2,
+                            Nombre = "LasBestiasLocas",
+                            Precio = 2500f
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Mascota", b =>
@@ -72,6 +82,33 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("Mascotas");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Notificacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EstadoReserva")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaCreado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mensaje")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReservaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notificaciones");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reserva", b =>
@@ -112,6 +149,9 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
 
                     b.HasIndex("GuarderiaId");
 
@@ -232,6 +272,12 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Reserva", b =>
                 {
+                    b.HasOne("Domain.Entities.Notificacion", "Notificacion")
+                        .WithOne("Reserva")
+                        .HasForeignKey("Domain.Entities.Reserva", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Guarderia", "Guarderia")
                         .WithMany("Reservas")
                         .HasForeignKey("GuarderiaId")
@@ -247,6 +293,8 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Guarderia");
 
                     b.Navigation("Mascota");
+
+                    b.Navigation("Notificacion");
                 });
 
             modelBuilder.Entity("Domain.Entities.Guarderia", b =>
@@ -255,6 +303,12 @@ namespace Infrastructure.Data.Migrations
                 });
 
             modelBuilder.Entity("Domain.Entities.Mascota", b =>
+                {
+                    b.Navigation("Reserva")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Notificacion", b =>
                 {
                     b.Navigation("Reserva")
                         .IsRequired();

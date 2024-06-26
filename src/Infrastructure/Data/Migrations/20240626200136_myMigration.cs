@@ -8,11 +8,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class myMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Notificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Mensaje = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EstadoReserva = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReservaId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
@@ -107,6 +124,12 @@ namespace Infrastructure.Data.Migrations
                         principalTable: "Mascotas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservas_Notificaciones_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Notificaciones",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -118,6 +141,11 @@ namespace Infrastructure.Data.Migrations
                     { 2, "", "contraseña2", "", "", "", "usuario2", "Dueno" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Guarderias",
+                columns: new[] { "Id", "Direccion", "DuenoId", "Nombre", "Precio" },
+                values: new object[] { 1, "Zeballos 1341", 2, "LasBestiasLocas", 2500f });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Guarderias_DuenoId",
                 table: "Guarderias",
@@ -127,6 +155,12 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_Mascotas_ClienteId",
                 table: "Mascotas",
                 column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservas_ClienteId",
+                table: "Reservas",
+                column: "ClienteId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_GuarderiaId",
@@ -151,6 +185,9 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Mascotas");
+
+            migrationBuilder.DropTable(
+                name: "Notificaciones");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

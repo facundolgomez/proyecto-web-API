@@ -117,6 +117,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>(); 
 
+
 #endregion
 
 #region Services

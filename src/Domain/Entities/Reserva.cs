@@ -25,6 +25,7 @@ namespace Domain.Entities
         public TipoMascota TipoMascota { get; set; }
         public EstadoReserva Estado { get; set; }
         public int ClienteId { get; set; }
+        public Notificacion Notificacion { get; set; }  //propiedad de navegacion
 
         public Reserva()
         {

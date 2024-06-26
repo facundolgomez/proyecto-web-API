@@ -14,16 +14,18 @@ namespace Application.Services
         private readonly GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _genericService;
         private readonly IRepository<Mascota> _mascotaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
-        private readonly INotificacionRepository _notificacionRepository; 
+        private readonly INotificacionRepository _notificacionRepository;
+        private readonly INotificacionService _notificacionService;
         private readonly IMapper _mapper;
 
         public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository,
-            IRepository<Reserva> reservaRepository, INotificacionRepository notificacionRepository, IMapper mapper)
+            IRepository<Reserva> reservaRepository, INotificacionRepository notificacionRepository, INotificacionService notificacionService, IMapper mapper)
         {
             _genericService = new GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>(repository, mapper);
             _mascotaRepository = mascotaRepository;
             _reservaRepository = reservaRepository;
-            _notificacionRepository = notificacionRepository;   
+            _notificacionRepository = notificacionRepository;
+            _notificacionService = notificacionService; 
             _mapper = mapper;
         }
 
@@ -83,7 +85,8 @@ namespace Application.Services
 
             var nuevaReserva = _mapper.Map<Reserva>(reservaCreateRequest);
             nuevaReserva.ClienteId = clienteId;
-
+            //notificamos al Dueno
+            _notificacionService.EnviarNotificacion(clienteId, reservaCreateRequest.Descripcion);
             _reservaRepository.Add(nuevaReserva);
             return _mapper.Map<ReservaDto>(nuevaReserva);
         }

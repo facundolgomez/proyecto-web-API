@@ -80,9 +80,12 @@ namespace Infrastructure.Data
             // configuracion de la entidad Guarderia
             modelBuilder.Entity<Guarderia>(e =>
             {
-                    e.HasMany(g => g.Reservas)
-                    .WithOne(r => r.Guarderia)
-                    .HasForeignKey(r => r.GuarderiaId);
+                e.HasMany(g => g.Reservas)
+                .WithOne(r => r.Guarderia)
+                .HasForeignKey(r => r.GuarderiaId);
+
+                
+
             });
 
             // configuracion de la entidad Dueno
@@ -116,6 +119,12 @@ namespace Infrastructure.Data
                     .HasForeignKey<Reserva>(r => r.MascotaId);
             });
 
+            modelBuilder.Entity<Notificacion>(e =>
+            {
+                e.HasOne(n => n.Reserva)
+                .WithOne(r => r.Notificacion)
+                .HasForeignKey<Reserva>(r => r.ClienteId);
+            });
 
             
 
@@ -141,6 +150,17 @@ namespace Infrastructure.Data
                     NombreUsuario = "usuario2",
                     Contrasena = "contraseña2",
                     UserRole = UserRole.Dueno,
+                }
+            );
+
+            modelBuilder.Entity<Guarderia>().HasData(
+                new Guarderia
+                {
+                    Id = 1,
+                    Nombre = "LasBestiasLocas",
+                    Direccion = "Zeballos 1341",
+                    Precio = 2500,
+                    DuenoId = 2
                 }
             );
 
