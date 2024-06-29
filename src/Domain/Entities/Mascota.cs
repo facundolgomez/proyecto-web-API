@@ -14,14 +14,14 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Cliente? Cliente { get; set; } = new Cliente();  //propiedad de navegacion,
+        public Cliente? Cliente { get; set; } //propiedad de navegacion,
                                              // permite acceder a la entidad Cliente
                                              //desde una instancia de mascota
         [Required]
         public string Nombre { get; set; } = string.Empty;  
        
 
-        public int ClienteId { get; set; }
+        public int? ClienteId { get; set; }
         public int? ReservaId { get; set; }
 
 

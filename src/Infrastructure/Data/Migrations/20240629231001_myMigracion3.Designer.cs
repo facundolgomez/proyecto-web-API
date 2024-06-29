@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240626200136_myMigration")]
-    partial class myMigration
+    [Migration("20240629231001_myMigracion3")]
+    partial class myMigracion3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,16 +45,6 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("DuenoId");
 
                     b.ToTable("Guarderias");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Direccion = "Zeballos 1341",
-                            DuenoId = 2,
-                            Nombre = "LasBestiasLocas",
-                            Precio = 2500f
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Mascota", b =>
@@ -63,7 +53,7 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ClienteId")
+                    b.Property<int?>("ClienteId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
@@ -90,8 +80,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EstadoReserva")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("EstadoReserva")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("FechaCreado")
                         .HasColumnType("TEXT");
@@ -134,10 +125,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("FechaHasta")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("GuarderiaId")
+                    b.Property<int?>("GuarderiaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MascotaId")
+                    b.Property<int?>("MascotaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TipoMascota")
@@ -263,9 +254,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Mascotas")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cliente");
                 });
@@ -280,15 +269,11 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("Domain.Entities.Guarderia", "Guarderia")
                         .WithMany("Reservas")
-                        .HasForeignKey("GuarderiaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GuarderiaId");
 
                     b.HasOne("Domain.Entities.Mascota", "Mascota")
                         .WithOne("Reserva")
-                        .HasForeignKey("Domain.Entities.Reserva", "MascotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Domain.Entities.Reserva", "MascotaId");
 
                     b.Navigation("Guarderia");
 

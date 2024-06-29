@@ -16,8 +16,9 @@ namespace Application.Models
         public DateTime FechaHasta { get; set; }
         public int GuarderiaId { get; set; }
         public int MascotaId { get; set; }
-        public string Titulo { get; set; }
-        public string Descripcion { get; set; }
+        public int ClienteId { get; set; }  
+        public string Titulo { get; set; }  
+        public string Descripcion { get; set; } 
         public EstadoReserva Estado { get; set; }
 
         public static ReservaDto Create(Reserva reserva)
@@ -29,6 +30,7 @@ namespace Application.Models
             dto.TipoMascota = reserva.TipoMascota;
             dto.GuarderiaId = reserva.GuarderiaId;
             dto.MascotaId   = reserva.MascotaId;
+            dto.ClienteId = reserva.ClienteId;
             dto.Estado = reserva.Estado;
             return dto;
         }

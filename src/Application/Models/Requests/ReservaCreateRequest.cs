@@ -13,6 +13,7 @@ namespace Application.Models.Requests
         
         public int GuarderiaId { get; set; }
         public int MascotaId { get; set; }
+        public int ClienteId { get; set; }  
         public string Titulo { get; set; }  = string.Empty;
         public string Descripcion { get; set; } = string.Empty;
         public DateTime FechaDesde { get; set; }

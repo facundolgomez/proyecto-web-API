@@ -77,7 +77,7 @@ namespace Application.Services
 
         }
 
-        public ReservaDto SolicitarReserva(int clienteId, ReservaCreateRequest reservaCreateRequest)
+        public ReservaDto CrearReserva(int clienteId, ReservaCreateRequest reservaCreateRequest)
         {
             var cliente = _genericService.GetById(clienteId);
             if (cliente == null)
@@ -85,9 +85,19 @@ namespace Application.Services
 
             var nuevaReserva = _mapper.Map<Reserva>(reservaCreateRequest);
             nuevaReserva.ClienteId = clienteId;
-            //notificamos al Dueno
-            _notificacionService.EnviarNotificacion(clienteId, reservaCreateRequest.Descripcion);
+
             _reservaRepository.Add(nuevaReserva);
+
+            var mascota = _mascotaRepository.GetById(reservaCreateRequest.MascotaId);
+            if (mascota != null)
+            {
+                mascota.ReservaId = nuevaReserva.Id; // asignamos la ReservaId a la mascota
+                _mascotaRepository.Update(mascota);
+            }
+
+            // notificamos al Dueno
+            _notificacionService.EnviarNotificacion(clienteId, reservaCreateRequest.Descripcion);
+
             return _mapper.Map<ReservaDto>(nuevaReserva);
         }
 

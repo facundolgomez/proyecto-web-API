@@ -107,12 +107,12 @@ namespace web.Controllers
         }
 
 
-        [HttpPost("{clienteId}/solicitar-reserva/")]
-        public IActionResult SolicitarReserva([FromRoute] int clienteId, [FromBody] ReservaCreateRequest reservaCreateRequest)
+        [HttpPost("{clienteId}/crear-reserva/")]
+        public IActionResult CrearReserva([FromRoute] int clienteId, [FromBody] ReservaCreateRequest reservaCreateRequest)
         {
             try
             {
-                var newObj = _clienteService.SolicitarReserva(clienteId, reservaCreateRequest);
+                var newObj = _clienteService.CrearReserva(clienteId, reservaCreateRequest);
                 return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
             }
             catch (NotFoundException ex)

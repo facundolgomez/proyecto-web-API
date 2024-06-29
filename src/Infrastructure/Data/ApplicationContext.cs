@@ -119,6 +119,11 @@ namespace Infrastructure.Data
                     .HasForeignKey<Reserva>(r => r.MascotaId);
             });
 
+            var estadoReserva = new EnumToStringConverter<EstadoReserva>();
+            modelBuilder.Entity<Notificacion>()
+                .Property(e => e.EstadoReserva)
+                .HasConversion(estadoReserva);
+
             modelBuilder.Entity<Notificacion>(e =>
             {
                 e.HasOne(n => n.Reserva)
@@ -153,16 +158,7 @@ namespace Infrastructure.Data
                 }
             );
 
-            modelBuilder.Entity<Guarderia>().HasData(
-                new Guarderia
-                {
-                    Id = 1,
-                    Nombre = "LasBestiasLocas",
-                    Direccion = "Zeballos 1341",
-                    Precio = 2500,
-                    DuenoId = 2
-                }
-            );
+            
 
 
             base.OnModelCreating(modelBuilder);

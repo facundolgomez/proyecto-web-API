@@ -12,7 +12,7 @@ namespace Application.Interfaces
     public interface IClienteService : IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>
     {
         void AsignarMascota(int clienteId, int mascotaId);
-        ReservaDto SolicitarReserva(int clienteId, ReservaCreateRequest reservaCreateRequest);
+        ReservaDto CrearReserva(int clienteId, ReservaCreateRequest reservaCreateRequest);
         void CancelarReserva(int reservaId);
         void EnviarMensajeAlDueno(int reservaId, string mensaje);
         List<NotificacionDto> VerNotificaciones(int clienteId);

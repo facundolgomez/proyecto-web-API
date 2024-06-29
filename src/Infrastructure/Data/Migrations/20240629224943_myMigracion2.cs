@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class myMigration : Migration
+    public partial class myMigracion2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,7 @@ namespace Infrastructure.Data.Migrations
                     UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
                     Mensaje = table.Column<string>(type: "TEXT", nullable: false),
                     FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EstadoReserva = table.Column<int>(type: "INTEGER", nullable: false),
+                    EstadoReserva = table.Column<string>(type: "TEXT", nullable: false),
                     ReservaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -78,7 +78,7 @@ namespace Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: true),
                     ReservaId = table.Column<int>(type: "INTEGER", nullable: true),
                     TipoMascota = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -89,8 +89,7 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_Mascotas_Usuarios_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -140,11 +139,6 @@ namespace Infrastructure.Data.Migrations
                     { 1, "", "9876", "", "", "", "facu123", "Cliente" },
                     { 2, "", "contraseña2", "", "", "", "usuario2", "Dueno" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Guarderias",
-                columns: new[] { "Id", "Direccion", "DuenoId", "Nombre", "Precio" },
-                values: new object[] { 1, "Zeballos 1341", 2, "LasBestiasLocas", 2500f });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Guarderias_DuenoId",
