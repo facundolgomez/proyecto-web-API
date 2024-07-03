@@ -16,10 +16,9 @@ namespace Domain.Entities
         public int UsuarioId { get; set; }
         public string Mensaje { get; set; } = string.Empty;
         public DateTime FechaCreado { get; set; }
-        public EstadoReserva EstadoReserva { get; set; }
-        
-        public Reserva Reserva { get; set; }  
-        public int ReservaId { get; set; }  
+        public EstadoReserva EstadoReserva { get; set; } 
+        public int? ReservaId { get; set; }
+        public Usuario Usuario { get; set; }
 
     }
 }

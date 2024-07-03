@@ -13,6 +13,6 @@ namespace Application.Models.Requests
         public string? NombreUsuario { get; set; }
         [Required]
         public string? Contrasena { get; set; }
-        public string? UserRole { get; set; }
+        
     }
 }

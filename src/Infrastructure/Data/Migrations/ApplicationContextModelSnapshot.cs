@@ -57,9 +57,6 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ReservaId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("TipoMascota")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -88,13 +85,18 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ReservaId")
+                    b.Property<int?>("ReservaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReservaId")
+                        .IsUnique();
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Notificaciones");
                 });
@@ -103,9 +105,6 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ClienteId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
@@ -138,13 +137,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
-
                     b.HasIndex("GuarderiaId");
 
-                    b.HasIndex("MascotaId")
-                        .IsUnique();
+                    b.HasIndex("MascotaId");
 
                     b.ToTable("Reservas");
                 });
@@ -256,14 +251,23 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Cliente");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Reserva", b =>
+            modelBuilder.Entity("Domain.Entities.Notificacion", b =>
                 {
-                    b.HasOne("Domain.Entities.Notificacion", "Notificacion")
-                        .WithOne("Reserva")
-                        .HasForeignKey("Domain.Entities.Reserva", "ClienteId")
+                    b.HasOne("Domain.Entities.Reserva", null)
+                        .WithOne("Notificacion")
+                        .HasForeignKey("Domain.Entities.Notificacion", "ReservaId");
+
+                    b.HasOne("Domain.Entities.Usuario", "Usuario")
+                        .WithMany("Notificaciones")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Reserva", b =>
+                {
                     b.HasOne("Domain.Entities.Guarderia", "Guarderia")
                         .WithMany("Reservas")
                         .HasForeignKey("GuarderiaId")
@@ -271,16 +275,14 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Mascota", "Mascota")
-                        .WithOne("Reserva")
-                        .HasForeignKey("Domain.Entities.Reserva", "MascotaId")
+                        .WithMany("Reservas")
+                        .HasForeignKey("MascotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Guarderia");
 
                     b.Navigation("Mascota");
-
-                    b.Navigation("Notificacion");
                 });
 
             modelBuilder.Entity("Domain.Entities.Guarderia", b =>
@@ -290,14 +292,18 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Mascota", b =>
                 {
-                    b.Navigation("Reserva")
+                    b.Navigation("Reservas");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Reserva", b =>
+                {
+                    b.Navigation("Notificacion")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Notificacion", b =>
+            modelBuilder.Entity("Domain.Entities.Usuario", b =>
                 {
-                    b.Navigation("Reserva")
-                        .IsRequired();
+                    b.Navigation("Notificaciones");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>

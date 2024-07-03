@@ -8,28 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class myMigracion2 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Notificaciones",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Mensaje = table.Column<string>(type: "TEXT", nullable: false),
-                    FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EstadoReserva = table.Column<string>(type: "TEXT", nullable: false),
-                    ReservaId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
@@ -79,7 +62,6 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ReservaId = table.Column<int>(type: "INTEGER", nullable: true),
                     TipoMascota = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -105,8 +87,7 @@ namespace Infrastructure.Data.Migrations
                     Titulo = table.Column<string>(type: "TEXT", nullable: false),
                     Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     TipoMascota = table.Column<string>(type: "TEXT", nullable: false),
-                    Estado = table.Column<string>(type: "TEXT", nullable: false),
-                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Estado = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,10 +104,32 @@ namespace Infrastructure.Data.Migrations
                         principalTable: "Mascotas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Mensaje = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EstadoReserva = table.Column<string>(type: "TEXT", nullable: false),
+                    ReservaId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservas_Notificaciones_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Notificaciones",
+                        name: "FK_Notificaciones_Reservas_ReservaId",
+                        column: x => x.ReservaId,
+                        principalTable: "Reservas",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Notificaciones_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -151,10 +154,15 @@ namespace Infrastructure.Data.Migrations
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservas_ClienteId",
-                table: "Reservas",
-                column: "ClienteId",
+                name: "IX_Notificaciones_ReservaId",
+                table: "Notificaciones",
+                column: "ReservaId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notificaciones_UsuarioId",
+                table: "Notificaciones",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_GuarderiaId",
@@ -164,13 +172,15 @@ namespace Infrastructure.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_MascotaId",
                 table: "Reservas",
-                column: "MascotaId",
-                unique: true);
+                column: "MascotaId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Notificaciones");
+
             migrationBuilder.DropTable(
                 name: "Reservas");
 
@@ -179,9 +189,6 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Mascotas");
-
-            migrationBuilder.DropTable(
-                name: "Notificaciones");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

@@ -12,20 +12,22 @@ namespace Application.Services
     public class ClienteService : IClienteService
     {
         private readonly GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto> _genericService;
-        private readonly IRepository<Mascota> _mascotaRepository;
+        private readonly IMascotaRepository _mascotaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
+        private readonly IRepository<Guarderia> _guarderiaRepository;
         private readonly INotificacionRepository _notificacionRepository;
         private readonly INotificacionService _notificacionService;
         private readonly IMapper _mapper;
 
-        public ClienteService(IRepository<Cliente> repository, IRepository<Mascota> mascotaRepository,
-            IRepository<Reserva> reservaRepository, INotificacionRepository notificacionRepository, INotificacionService notificacionService, IMapper mapper)
+        public ClienteService(IRepository<Cliente> repository, IMascotaRepository mascotaRepository,
+            IRepository<Reserva> reservaRepository, INotificacionRepository notificacionRepository, INotificacionService notificacionService, IRepository<Guarderia> guarderiaRepository, IMapper mapper)
         {
             _genericService = new GenericService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>(repository, mapper);
             _mascotaRepository = mascotaRepository;
             _reservaRepository = reservaRepository;
             _notificacionRepository = notificacionRepository;
             _notificacionService = notificacionService; 
+            _guarderiaRepository = guarderiaRepository; 
             _mapper = mapper;
         }
 
@@ -77,28 +79,35 @@ namespace Application.Services
 
         }
 
-        public ReservaDto CrearReserva(int clienteId, ReservaCreateRequest reservaCreateRequest)
+        public ReservaDto CrearReserva(int mascotaId, ReservaCreateRequest reservaCreateRequest)
         {
-            var cliente = _genericService.GetById(clienteId);
-            if (cliente == null)
-                throw new NotFoundException($"No se encontró el cliente con el id {clienteId}");
+            var mascota = _mascotaRepository.GetByIdWithCliente(mascotaId);
+
+            if (mascota == null)
+                throw new NotFoundException($"No se encontró la mascota con el id {mascotaId}");
+
+
+            var guarderia = _guarderiaRepository.GetById(reservaCreateRequest.GuarderiaId);
+            if (guarderia == null)
+                throw new NotFoundException($"No se encontró la guardería con el id {reservaCreateRequest.GuarderiaId}");
+
 
             var nuevaReserva = _mapper.Map<Reserva>(reservaCreateRequest);
-            nuevaReserva.ClienteId = clienteId;
+            
+            nuevaReserva.GuarderiaId = reservaCreateRequest.GuarderiaId;
+            nuevaReserva.MascotaId = mascotaId;
+            nuevaReserva.TipoMascota = mascota.TipoMascota;
 
             _reservaRepository.Add(nuevaReserva);
 
-            var mascota = _mascotaRepository.GetById(reservaCreateRequest.MascotaId);
-            if (mascota != null)
-            {
-                mascota.ReservaId = nuevaReserva.Id; // asignamos la ReservaId a la mascota
-                _mascotaRepository.Update(mascota);
-            }
-
+           
+            
             // notificamos al Dueno
-            _notificacionService.EnviarNotificacion(clienteId, reservaCreateRequest.Descripcion);
 
-            return _mapper.Map<ReservaDto>(nuevaReserva);
+            _notificacionService.EnviarNotificacion(mascota.Cliente.Id, reservaCreateRequest.Descripcion);
+
+            var reservaDto = _mapper.Map<ReservaDto>(nuevaReserva);
+            return reservaDto;  
         }
 
         public void CancelarReserva(int reservaId)

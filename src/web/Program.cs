@@ -115,7 +115,8 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 //configuracion del repositorio generico
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>(); 
+builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>();
+builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
 
 
 #endregion

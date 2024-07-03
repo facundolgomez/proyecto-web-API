@@ -15,8 +15,7 @@ namespace Application.Models
         public DateTime FechaDesde { get; set; }
         public DateTime FechaHasta { get; set; }
         public int GuarderiaId { get; set; }
-        public int MascotaId { get; set; }
-        public int ClienteId { get; set; }  
+        public int MascotaId { get; set; } 
         public string Titulo { get; set; }  
         public string Descripcion { get; set; } 
         public EstadoReserva Estado { get; set; }
@@ -27,10 +26,9 @@ namespace Application.Models
             dto.Id = reserva.Id;
             dto.FechaDesde = reserva.FechaDesde;
             dto.FechaHasta = reserva.FechaHasta;
-            dto.TipoMascota = reserva.TipoMascota;
+            dto.TipoMascota = reserva.Mascota.TipoMascota;
             dto.GuarderiaId = reserva.GuarderiaId;
             dto.MascotaId   = reserva.MascotaId;
-            dto.ClienteId = reserva.ClienteId;
             dto.Estado = reserva.Estado;
             return dto;
         }

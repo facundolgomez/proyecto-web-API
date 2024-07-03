@@ -30,7 +30,8 @@ namespace Application.Profiles
 
             CreateMap<ReservaCreateRequest, Reserva>();
             CreateMap<ReservaUpdateRequest, Reserva>();
-            CreateMap<Reserva, ReservaDto>();
+            CreateMap<Reserva, ReservaDto>()
+            .ForMember(dest => dest.TipoMascota, opt => opt.MapFrom(src => src.Mascota.TipoMascota));
 
             CreateMap<Notificacion, NotificacionDto>();
         }

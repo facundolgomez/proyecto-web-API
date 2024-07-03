@@ -29,7 +29,8 @@ namespace Domain.Entities
         
         public string Direccion { get; set; } = string.Empty;
         [Required]
-        public UserRole UserRole { get; set; } 
+        public UserRole UserRole { get; set; }
+        public ICollection<Notificacion> Notificaciones { get; set; }
 
 
 

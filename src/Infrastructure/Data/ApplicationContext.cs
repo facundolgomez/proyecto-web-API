@@ -35,12 +35,6 @@ namespace Infrastructure.Data
                 .HasValue<Dueno>(UserRole.Dueno)
                 .HasValue<Cliente>(UserRole.Cliente);
 
-            var tipoUsuario = new EnumToStringConverter<UserRole>();
-            modelBuilder.Entity<Usuario>()
-                .Property(e => e.UserRole)
-                .HasConversion(tipoUsuario);
-
-
             modelBuilder.Entity<Cliente>()
         .ToTable("Usuarios");
 
@@ -50,6 +44,39 @@ namespace Infrastructure.Data
             // configuracion de la tabla para todas las entidades que heredan de Usuario
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
+            //me convierte el tipo enum a string para el tipo de usuario (cliente o dueno)
+            var tipoUsuario = new EnumToStringConverter<UserRole>();
+            modelBuilder.Entity<Usuario>()
+                .Property(e => e.UserRole)
+                .HasConversion(tipoUsuario);
+
+            //me convierte el tipo enum a string para el tipo de mascota (gato o perro)
+            var tipoMascotaConverter = new EnumToStringConverter<TipoMascota>();
+            modelBuilder.Entity<Mascota>()
+                .Property(e => e.TipoMascota)
+                .HasConversion(tipoMascotaConverter);
+
+            //me convierte el tipo enum a string para el tipo de mascota (gato o perro) en la tabla Reserva
+            var tipoMascotaConverter2 = new EnumToStringConverter<TipoMascota>();
+            modelBuilder.Entity<Reserva>()
+                .Property(e => e.TipoMascota)
+                .HasConversion(tipoMascotaConverter2);
+            
+            //me convierte el tipo enum a string de EstadoReserva en la tabla Reserva
+            var estado = new EnumToStringConverter<EstadoReserva>();
+            modelBuilder.Entity<Reserva>()
+                .Property(e => e.Estado)
+                .HasConversion(estado);
+
+            //me convierte el tipo enum a string de EstadoReserva en la tabla notificacion
+            var estadoReserva = new EnumToStringConverter<EstadoReserva>();
+            modelBuilder.Entity<Notificacion>()
+                .Property(e => e.EstadoReserva)
+                .HasConversion(estadoReserva);
+
+
+
+
             // configuracion de la entidad Cliente
             modelBuilder.Entity<Cliente>(e =>
             {
@@ -58,13 +85,6 @@ namespace Infrastructure.Data
                     .HasForeignKey(m => m.ClienteId); //clave foranea para la tabla Mascotas
             });
 
-            
-            //me convierte el tipo enum a string para el tipo de mascota (gato o perro)
-            var tipoMascotaConverter = new EnumToStringConverter<TipoMascota>();
-            modelBuilder.Entity<Mascota>()
-                .Property(e => e.TipoMascota)
-                .HasConversion(tipoMascotaConverter);
-
             // configuracion de la entidad Mascota
             modelBuilder.Entity<Mascota>(e =>
             {
@@ -72,9 +92,9 @@ namespace Infrastructure.Data
                     .WithMany(c => c.Mascotas)
                     .HasForeignKey(m => m.ClienteId);
 
-                    e.HasOne(m => m.Reserva)
+                    e.HasMany(m => m.Reservas)
                     .WithOne(r => r.Mascota)
-                    .HasForeignKey<Reserva>(r => r.MascotaId);
+                    .HasForeignKey(r => r.MascotaId);
             });
 
             // configuracion de la entidad Guarderia
@@ -83,9 +103,6 @@ namespace Infrastructure.Data
                 e.HasMany(g => g.Reservas)
                 .WithOne(r => r.Guarderia)
                 .HasForeignKey(r => r.GuarderiaId);
-
-                
-
             });
 
             // configuracion de la entidad Dueno
@@ -97,17 +114,6 @@ namespace Infrastructure.Data
             });
 
             // configuracion de la entidad Reserva
-
-            var tipoMascotaConverter2 = new EnumToStringConverter<TipoMascota>();
-            modelBuilder.Entity<Reserva>()
-                .Property(e => e.TipoMascota)
-                .HasConversion(tipoMascotaConverter2);
-
-            var estado = new EnumToStringConverter<EstadoReserva>();
-            modelBuilder.Entity<Reserva>()
-                .Property(e => e.Estado)
-                .HasConversion(estado);
-
             modelBuilder.Entity<Reserva>(e =>
             {
                     e.HasOne(r => r.Guarderia)
@@ -115,23 +121,18 @@ namespace Infrastructure.Data
                     .HasForeignKey(r => r.GuarderiaId);
 
                     e.HasOne(r => r.Mascota)
-                    .WithOne(m => m.Reserva)
-                    .HasForeignKey<Reserva>(r => r.MascotaId);
+                    .WithMany(m => m.Reservas)
+                    .HasForeignKey(r => r.MascotaId);
             });
-
-            var estadoReserva = new EnumToStringConverter<EstadoReserva>();
-            modelBuilder.Entity<Notificacion>()
-                .Property(e => e.EstadoReserva)
-                .HasConversion(estadoReserva);
 
             modelBuilder.Entity<Notificacion>(e =>
             {
-                e.HasOne(n => n.Reserva)
-                .WithOne(r => r.Notificacion)
-                .HasForeignKey<Reserva>(r => r.ClienteId);
+                e.HasOne(n => n.Usuario)
+                 .WithMany(u => u.Notificaciones)
+                 .HasForeignKey(n => n.UsuarioId);
             });
 
-            
+
 
             //ponemos entidades con los datos
             //para hacer pruebas de autenticacion y probar endpoints
