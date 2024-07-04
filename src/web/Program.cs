@@ -15,6 +15,7 @@ using System.Text;
 using Infrastructure.Services;
 using Domain.Enums;
 using Infrastructure.Repositories;
+using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,15 +89,9 @@ builder.Services.AddAuthorization(options =>
 #endregion
 
 #region Database
+string connectionString = builder.Configuration["ConnectionStrings:DBConnectionString"];
 
-
-/*builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(
-    builder.Configuration["ConnectionString:DBConnectionString"], b => b.MigrationsAssembly("web")));
-#endregion*/
-
-string connectionString = builder.Configuration["ConnectionStrings:DBConnectionString"]!;
-
-// Configure the SQLite connection
+// configurar la conexion sqlite
 var connection = new SqliteConnection(connectionString);
 connection.Open();
 
@@ -107,7 +102,9 @@ using (var command = connection.CreateCommand())
     command.ExecuteNonQuery();
 }
 
-builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextOptions.UseSqlite(connection));
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseSqlite(connection));
+
 #endregion
 
 #region Repositories

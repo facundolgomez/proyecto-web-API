@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240703204846_myMigration")]
+    partial class myMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -205,11 +208,11 @@ namespace Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Apellido = "Gomez",
+                            Apellido = "",
                             Contrasena = "9876",
-                            Direccion = "Oroño 2436",
-                            Email = "facugomez@gmail.com",
-                            Nombre = "Facundo",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
                             NombreUsuario = "facu123",
                             UserRole = "Cliente"
                         });
@@ -227,11 +230,11 @@ namespace Infrastructure.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Apellido = "Gerosa",
+                            Apellido = "",
                             Contrasena = "contraseña2",
-                            Direccion = "Salta 3572",
-                            Email = "marianogerosa@gmail.com",
-                            Nombre = "Mariano",
+                            Direccion = "",
+                            Email = "",
+                            Nombre = "",
                             NombreUsuario = "usuario2",
                             UserRole = "Dueno"
                         });

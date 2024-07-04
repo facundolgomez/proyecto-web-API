@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ namespace Application.Models
         public string Nombre { get; set; } = string.Empty;
 
         public string Apellido { get; set; } = string.Empty;
+        
+        public string NombreUsuario { get; set; } = string.Empty;
+        
+        public string Email { get; set; } = string.Empty;
+        public string Direccion { get; set; } = string.Empty;
+        public UserRole UserRole { get; set; }
 
         public static ClienteDto Create(Cliente cliente)
         {
@@ -21,6 +28,10 @@ namespace Application.Models
             dto.Id = cliente.Id;
             dto.Nombre = cliente.Nombre;
             dto.Apellido = cliente.Apellido;
+            dto.NombreUsuario = cliente.NombreUsuario;
+            dto.Email = cliente.Email;  
+            dto.Direccion = cliente.Direccion;  
+            dto.UserRole = cliente.UserRole;    
 
             return dto;
         }

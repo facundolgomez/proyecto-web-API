@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240703213059_othermigracion")]
+    partial class othermigracion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -207,7 +210,7 @@ namespace Infrastructure.Data.Migrations
                             Id = 1,
                             Apellido = "Gomez",
                             Contrasena = "9876",
-                            Direccion = "Oroño 2436",
+                            Direccion = "",
                             Email = "facugomez@gmail.com",
                             Nombre = "Facundo",
                             NombreUsuario = "facu123",
@@ -227,11 +230,11 @@ namespace Infrastructure.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Apellido = "Gerosa",
+                            Apellido = "Gates",
                             Contrasena = "contraseña2",
-                            Direccion = "Salta 3572",
-                            Email = "marianogerosa@gmail.com",
-                            Nombre = "Mariano",
+                            Direccion = "",
+                            Email = "billgates@gmail.com",
+                            Nombre = "Bill",
                             NombreUsuario = "usuario2",
                             UserRole = "Dueno"
                         });

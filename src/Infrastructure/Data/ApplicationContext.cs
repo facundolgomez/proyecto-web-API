@@ -144,7 +144,11 @@ namespace Infrastructure.Data
             {
                 Id = 1,
                 NombreUsuario = "facu123",
+                Nombre = "Facundo",
+                Apellido = "Gomez",
+                Email = "facugomez@gmail.com",
                 Contrasena = "9876",
+                Direccion = "Oroño 2436",
                 UserRole = UserRole.Cliente,
             }
             );
@@ -154,8 +158,13 @@ namespace Infrastructure.Data
                 {
                     Id = 2,
                     NombreUsuario = "usuario2",
+                    Nombre = "Mariano",
+                    Apellido = "Gerosa",
+                    Email = "marianogerosa@gmail.com",
                     Contrasena = "contraseña2",
+                    Direccion = "Salta 3572",
                     UserRole = UserRole.Dueno,
+
                 }
             );
 

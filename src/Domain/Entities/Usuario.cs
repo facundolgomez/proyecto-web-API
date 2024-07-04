@@ -15,19 +15,29 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [Required]
-        
+        [MaxLength(50)]
         public string NombreUsuario { get; set; } = string.Empty;
-        
+
+        [MaxLength(50)]
         public string Nombre { get; set; } = string.Empty;
-        
+
+        [MaxLength(50)]
         public string Apellido { get; set; } = string.Empty;
+
         [Required]
+        [MaxLength(100)]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
+
         [Required]
+        [MaxLength(100)]
         public string Contrasena { get; set; } = string.Empty;
-        
+
+        [MaxLength(100)]
         public string Direccion { get; set; } = string.Empty;
+
         [Required]
         public UserRole UserRole { get; set; }
         public ICollection<Notificacion> Notificaciones { get; set; }
