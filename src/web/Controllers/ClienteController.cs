@@ -10,7 +10,7 @@ namespace web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Cliente")]
+    
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
@@ -23,6 +23,7 @@ namespace web.Controllers
 
         
         [HttpPost]
+        [Authorize(Policy = "Dueno")]
         public IActionResult Create([FromBody] ClienteCreateRequest clienteCreateRequest)
         {
             var newObj = _clienteService.Create(clienteCreateRequest);
@@ -32,6 +33,7 @@ namespace web.Controllers
 
         
         [HttpPut("{id}")]
+        [Authorize(Policy = "Dueno")]
         public IActionResult Update([FromRoute] int id, [FromBody] ClienteUpdateRequest clienteUpdateRequest)
         {
 
@@ -48,6 +50,7 @@ namespace web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Dueno")]
         public IActionResult Delete([FromRoute] int id)
         {
             try
@@ -64,6 +67,7 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
+        [Authorize(Policy = "Dueno")]
         public ActionResult<List<ClienteDto>> GetAll()
         {
             return _clienteService.GetAll();
@@ -72,6 +76,7 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
+        [Authorize(Policy = "Dueno")]
         public ActionResult<List<Cliente>> GetAllFullData()
         {
             return _clienteService.GetAllFullData();
@@ -79,6 +84,7 @@ namespace web.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "Dueno")]
         public ActionResult<ClienteDto> GetById([FromRoute] int id)
         {
             try
@@ -93,6 +99,7 @@ namespace web.Controllers
 
 
         [HttpPut("{clienteId}/asignar-mascota/{mascotaId}")]
+        [Authorize(Policy = "Dueno")]
         public IActionResult AsignarMascota([FromRoute] int clienteId, [FromRoute] int mascotaId)
         {
             try
@@ -107,7 +114,8 @@ namespace web.Controllers
         }
 
 
-        [HttpPost("{mascotaId}/crear-reserva/")]
+        [HttpPost("{mascotaId}/crear-reserva")]
+        [Authorize(Policy = "ClienteODueno")]
         public IActionResult CrearReserva([FromRoute] int mascotaId, [FromBody] ReservaCreateRequest reservaCreateRequest)
         {
             try
@@ -122,7 +130,8 @@ namespace web.Controllers
         }
 
 
-        [HttpPut("{reservaId}/cancelar-reserva/")]
+        [HttpPut("{reservaId}/cancelar-reserva")]
+        [Authorize(Policy = "ClienteODueno")]
         public IActionResult CancelarReserva([FromRoute] int reservaId)
         {
             try
@@ -138,6 +147,7 @@ namespace web.Controllers
 
         //endpoints recien agregados
         [HttpPost("{reservaId}/enviar-mensaje-al-dueno")]
+        [Authorize(Policy = "Cliente")]
         public IActionResult EnviarMensajeAlDueno([FromRoute] int reservaId, [FromBody] string mensaje)
         {
             try
@@ -152,6 +162,7 @@ namespace web.Controllers
         }
 
         [HttpGet("{clienteId}/ver-notificaciones")]
+        [Authorize(Policy = "Cliente")]
         public ActionResult<List<NotificacionDto>> VerNotificaciones([FromRoute] int clienteId)
         {
             try

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240702210730_oxdMigration")]
-    partial class oxdMigration
+    [Migration("20240707213305_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +77,14 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("EstadoReserva")
+                    b.Property<int>("DestinatarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DestinatarioRole")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EstadoMensaje")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -88,18 +95,18 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ReservaId")
+                    b.Property<int>("RemitenteId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RemitenteRole")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReservaId")
-                        .IsUnique();
+                    b.HasIndex("DestinatarioId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("RemitenteId");
 
                     b.ToTable("Notificaciones");
                 });
@@ -155,26 +162,32 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Apellido")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Contrasena")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserRole")
@@ -202,11 +215,11 @@ namespace Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Apellido = "",
+                            Apellido = "Gomez",
                             Contrasena = "9876",
-                            Direccion = "",
-                            Email = "",
-                            Nombre = "",
+                            Direccion = "Oroño 2436",
+                            Email = "facugomez@gmail.com",
+                            Nombre = "Facundo",
                             NombreUsuario = "facu123",
                             UserRole = "Cliente"
                         });
@@ -224,11 +237,11 @@ namespace Infrastructure.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Apellido = "",
+                            Apellido = "Gerosa",
                             Contrasena = "contraseña2",
-                            Direccion = "",
-                            Email = "",
-                            Nombre = "",
+                            Direccion = "Salta 3572",
+                            Email = "marianogerosa@gmail.com",
+                            Nombre = "Mariano",
                             NombreUsuario = "usuario2",
                             UserRole = "Dueno"
                         });
@@ -249,24 +262,29 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Mascotas")
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notificacion", b =>
                 {
-                    b.HasOne("Domain.Entities.Reserva", null)
-                        .WithOne("Notificacion")
-                        .HasForeignKey("Domain.Entities.Notificacion", "ReservaId");
-
-                    b.HasOne("Domain.Entities.Usuario", "Usuario")
-                        .WithMany("Notificaciones")
-                        .HasForeignKey("UsuarioId")
+                    b.HasOne("Domain.Entities.Usuario", "Destinatario")
+                        .WithMany("NotificacionesRecibidas")
+                        .HasForeignKey("DestinatarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuario");
+                    b.HasOne("Domain.Entities.Usuario", "Remitente")
+                        .WithMany("NotificacionesEnviadas")
+                        .HasForeignKey("RemitenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Destinatario");
+
+                    b.Navigation("Remitente");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reserva", b =>
@@ -298,15 +316,11 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Reservas");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Reserva", b =>
-                {
-                    b.Navigation("Notificacion")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
                 {
-                    b.Navigation("Notificaciones");
+                    b.Navigation("NotificacionesEnviadas");
+
+                    b.Navigation("NotificacionesRecibidas");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>

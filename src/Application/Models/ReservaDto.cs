@@ -33,12 +33,12 @@ namespace Application.Models
             return dto;
         }
 
-        public static List<ReservaDto> CreateList(IEnumerable<Reserva> reserva)
+        public static List<ReservaDto> CreateList(IEnumerable<Reserva> reservas)
         {
             List<ReservaDto> listDto = [];
-            foreach (var s in reserva)
+            foreach (var reserva in reservas)
             {
-                listDto.Add(Create(s));
+                listDto.Add(Create(reserva));
             }
 
             return listDto;

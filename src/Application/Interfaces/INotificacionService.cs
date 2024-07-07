@@ -11,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface INotificacionService 
     {
-        public NotificacionDto EnviarNotificacion(int usuarioId, string mensaje);
+        public void EnviarNotificacion(int usuarioId, int duenoGuarderiaId, string mensaje);
         public void MarcarComoLeido(int notificacionId);
     }
 }

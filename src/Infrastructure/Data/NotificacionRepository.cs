@@ -53,7 +53,9 @@ namespace Infrastructure.Repositories
 
         public List<Notificacion> GetByUsuarioId(int usuarioId)
         {
-            return _context.Notificaciones.Where(n => n.UsuarioId == usuarioId).ToList();
+            return _context.Notificaciones
+                .Where(n => n.RemitenteId == usuarioId || n.DestinatarioId == usuarioId)
+                .ToList();
         }
     }
 }

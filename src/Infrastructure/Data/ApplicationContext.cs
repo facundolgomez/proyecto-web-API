@@ -36,7 +36,7 @@ namespace Infrastructure.Data
                 .HasValue<Cliente>(UserRole.Cliente);
 
             modelBuilder.Entity<Cliente>()
-        .ToTable("Usuarios");
+                .ToTable("Usuarios");
 
             modelBuilder.Entity<Dueno>()
                 .ToTable("Usuarios");
@@ -44,35 +44,49 @@ namespace Infrastructure.Data
             // configuracion de la tabla para todas las entidades que heredan de Usuario
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
 
-            //me convierte el tipo enum a string para el tipo de usuario (cliente o dueno)
-            var tipoUsuario = new EnumToStringConverter<UserRole>();
+            //me convierte el tipo enum a string para columna tipo de usuario (cliente o dueno)
+            var tipoUsuarioConverter = new EnumToStringConverter<UserRole>();
             modelBuilder.Entity<Usuario>()
                 .Property(e => e.UserRole)
-                .HasConversion(tipoUsuario);
+                .HasConversion(tipoUsuarioConverter);
 
-            //me convierte el tipo enum a string para el tipo de mascota (gato o perro)
+            //me convierte el tipo enum a string para columna tipo  mascota (gato o perro)
             var tipoMascotaConverter = new EnumToStringConverter<TipoMascota>();
             modelBuilder.Entity<Mascota>()
                 .Property(e => e.TipoMascota)
                 .HasConversion(tipoMascotaConverter);
 
-            //me convierte el tipo enum a string para el tipo de mascota (gato o perro) en la tabla Reserva
+            //me convierte el tipo enum a string para columna tipo  mascota (gato o perro) en la tabla Reserva
             var tipoMascotaConverter2 = new EnumToStringConverter<TipoMascota>();
             modelBuilder.Entity<Reserva>()
                 .Property(e => e.TipoMascota)
                 .HasConversion(tipoMascotaConverter2);
-            
-            //me convierte el tipo enum a string de EstadoReserva en la tabla Reserva
-            var estado = new EnumToStringConverter<EstadoReserva>();
+
+            //me convierte el tipo enum a string para columna EstadoReserva en la tabla Reserva
+            var estadoConverter = new EnumToStringConverter<EstadoReserva>();
             modelBuilder.Entity<Reserva>()
                 .Property(e => e.Estado)
-                .HasConversion(estado);
+                .HasConversion(estadoConverter);
 
-            //me convierte el tipo enum a string de EstadoReserva en la tabla notificacion
-            var estadoReserva = new EnumToStringConverter<EstadoReserva>();
+            //me convierte el tipo enum a string para columna EstadoMensaje en la tabla Notificaciones
+            var estadoMensajeConverter = new EnumToStringConverter<EstadoMensaje>();
             modelBuilder.Entity<Notificacion>()
-                .Property(e => e.EstadoReserva)
-                .HasConversion(estadoReserva);
+                .Property(e => e.EstadoMensaje)
+                .HasConversion(estadoMensajeConverter);
+
+
+            var remitenteRoleConverter = new EnumToStringConverter<UserRole>();
+            var destinatarioRoleConverter = new EnumToStringConverter<UserRole>();
+
+            modelBuilder.Entity<Notificacion>()
+                .Property(e => e.RemitenteRole)
+                .HasConversion(remitenteRoleConverter);
+
+            modelBuilder.Entity<Notificacion>()
+                .Property(e => e.DestinatarioRole)
+                .HasConversion(destinatarioRoleConverter);
+
+
 
 
 
@@ -82,7 +96,10 @@ namespace Infrastructure.Data
             {
                     e.HasMany(c => c.Mascotas) //un cliente tiene muchas mascotas
                     .WithOne(m => m.Cliente) //cada mascota esta asociada a un unico cliente
-                    .HasForeignKey(m => m.ClienteId); //clave foranea para la tabla Mascotas
+                    .HasForeignKey(m => m.ClienteId) //clave foranea para la tabla Mascotas
+                    .OnDelete(DeleteBehavior.Cascade);//esto sirve para que cuando se elimine la entidad principal
+                                                      //se elimine la entidad dependiente, en este caso
+                                                      //( si se elimina un cliente, se eliminan todas sus mascotas)
             });
 
             // configuracion de la entidad Mascota
@@ -94,7 +111,9 @@ namespace Infrastructure.Data
 
                     e.HasMany(m => m.Reservas)
                     .WithOne(r => r.Mascota)
-                    .HasForeignKey(r => r.MascotaId);
+                    .HasForeignKey(r => r.MascotaId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
             });
 
             // configuracion de la entidad Guarderia
@@ -102,7 +121,8 @@ namespace Infrastructure.Data
             {
                 e.HasMany(g => g.Reservas)
                 .WithOne(r => r.Guarderia)
-                .HasForeignKey(r => r.GuarderiaId);
+                .HasForeignKey(r => r.GuarderiaId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             // configuracion de la entidad Dueno
@@ -110,7 +130,8 @@ namespace Infrastructure.Data
             {
                     e.HasMany(d => d.Guarderias)
                     .WithOne(g => g.Dueno)
-                    .HasForeignKey(g => g.DuenoId);
+                    .HasForeignKey(g => g.DuenoId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // configuracion de la entidad Reserva
@@ -127,9 +148,15 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Notificacion>(e =>
             {
-                e.HasOne(n => n.Usuario)
-                 .WithMany(u => u.Notificaciones)
-                 .HasForeignKey(n => n.UsuarioId);
+                e.HasOne(n => n.Remitente)
+                    .WithMany(u => u.NotificacionesEnviadas) 
+                    .HasForeignKey(n => n.RemitenteId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(n => n.Destinatario)
+                    .WithMany(u => u.NotificacionesRecibidas) 
+                    .HasForeignKey(n => n.DestinatarioId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
 

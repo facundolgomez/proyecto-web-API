@@ -97,7 +97,7 @@ namespace Application.Services
             var reservasPendientes = guarderia.Reservas
                 .Where(r => r.Estado == EstadoReserva.Pendiente)
                 .ToList();
-            return _mapper.Map<List<ReservaDto>>(reservasPendientes);
+            return ReservaDto.CreateList(reservasPendientes);
         }
 
         public GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest)
@@ -115,7 +115,7 @@ namespace Application.Services
                 throw new NotFoundException($"No se encontró la notificacion con el id {reservaId}");
 
             }
-            notificacion.EstadoReserva = EstadoReserva.Pendiente;
+            
             notificacion.Mensaje = mensaje;
             _notificacionRepository.Update(notificacion);
 

@@ -10,16 +10,17 @@ namespace Application.Models
 {
     public class NotificacionDto
     {
-        public EstadoReserva EstadoReserva { get; set; }
-        public int UsuarioId { get; set; }
+        public int Id { get; set; }
         public DateTime FechaCreado { get; set; }
+        public string Mensaje { get; set; } 
 
         public static NotificacionDto Create(Notificacion notificacion)
         {
             var dto = new NotificacionDto();
-            dto.EstadoReserva = notificacion.EstadoReserva;
-            dto.UsuarioId = notificacion.UsuarioId; 
+            dto.Id = notificacion.Id;
             dto.FechaCreado = notificacion.FechaCreado;
+            dto.Mensaje = notificacion.Mensaje; 
+            
 
             return dto;
         }

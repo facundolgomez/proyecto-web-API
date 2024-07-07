@@ -104,7 +104,7 @@ namespace Application.Services
             
             // notificamos al Dueno
 
-            _notificacionService.EnviarNotificacion(mascota.Cliente.Id, reservaCreateRequest.Descripcion);
+            _notificacionService.EnviarNotificacion(mascota.Cliente.Id, guarderia.DuenoId, reservaCreateRequest.Descripcion);
 
             var reservaDto = _mapper.Map<ReservaDto>(nuevaReserva);
             return reservaDto;  
@@ -114,19 +114,11 @@ namespace Application.Services
         {
             var reserva = _reservaRepository.GetById(reservaId);
             if (reserva == null)
-            {
                 throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
-                
-            }
 
             reserva.Estado = EstadoReserva.Rechazada;
             _reservaRepository.Update(reserva);
-
-            
-
-
         }
-    
 
         public void EnviarMensajeAlDueno(int reservaId, string mensaje)
         {
@@ -136,7 +128,7 @@ namespace Application.Services
                 throw new NotFoundException($"No se encontró la notificacion con el id {reservaId}");
 
             }
-            notificacion.EstadoReserva = EstadoReserva.Pendiente;
+            
             notificacion.Mensaje = mensaje;
             _notificacionRepository.Update(notificacion);
             

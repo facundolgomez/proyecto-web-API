@@ -74,7 +74,14 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("EstadoReserva")
+                    b.Property<int>("DestinatarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DestinatarioRole")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EstadoMensaje")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -85,18 +92,18 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ReservaId")
+                    b.Property<int>("RemitenteId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RemitenteRole")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReservaId")
-                        .IsUnique();
+                    b.HasIndex("DestinatarioId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("RemitenteId");
 
                     b.ToTable("Notificaciones");
                 });
@@ -252,24 +259,29 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Mascotas")
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notificacion", b =>
                 {
-                    b.HasOne("Domain.Entities.Reserva", null)
-                        .WithOne("Notificacion")
-                        .HasForeignKey("Domain.Entities.Notificacion", "ReservaId");
-
-                    b.HasOne("Domain.Entities.Usuario", "Usuario")
-                        .WithMany("Notificaciones")
-                        .HasForeignKey("UsuarioId")
+                    b.HasOne("Domain.Entities.Usuario", "Destinatario")
+                        .WithMany("NotificacionesRecibidas")
+                        .HasForeignKey("DestinatarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuario");
+                    b.HasOne("Domain.Entities.Usuario", "Remitente")
+                        .WithMany("NotificacionesEnviadas")
+                        .HasForeignKey("RemitenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Destinatario");
+
+                    b.Navigation("Remitente");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reserva", b =>
@@ -301,15 +313,11 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Reservas");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Reserva", b =>
-                {
-                    b.Navigation("Notificacion")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
                 {
-                    b.Navigation("Notificaciones");
+                    b.Navigation("NotificacionesEnviadas");
+
+                    b.Navigation("NotificacionesRecibidas");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>

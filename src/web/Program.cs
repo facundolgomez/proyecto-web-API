@@ -82,8 +82,9 @@ builder.Services.AddAuthentication("Bearer")
 // configuración de autorización basada en roles
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Dueno", policy => policy.RequireRole(UserRole.Dueno.ToString()));
     options.AddPolicy("Cliente", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.Dueno.ToString()));
+    options.AddPolicy("Dueno", policy => policy.RequireRole(UserRole.Dueno.ToString()));
+    options.AddPolicy("ClienteODueno", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.Dueno.ToString()));
 });
 
 #endregion

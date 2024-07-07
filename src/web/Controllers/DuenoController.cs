@@ -14,76 +14,12 @@ namespace web.Controllers
     public class DuenoController : ControllerBase
     {
         private readonly IDuenoService _duenoService;
-        private readonly IClienteService _clienteService;
-        
-
-        public DuenoController(IDuenoService duenoService, IClienteService clienteService)
+        public DuenoController(IDuenoService duenoService)
         {
             _duenoService = duenoService;
-            _clienteService = clienteService;
+            
         }
 
-        [HttpPost("cliente")]
-        public IActionResult CreateCliente([FromBody] ClienteCreateRequest clienteCreateRequest)
-        {
-            var newObj = _clienteService.Create(clienteCreateRequest);
-            return CreatedAtAction(nameof(GetClienteById), new { id = newObj.Id }, newObj);
-        }
-
-        [HttpPut("cliente/{id}")]
-        public IActionResult UpdateCliente([FromRoute] int id, [FromBody] ClienteUpdateRequest clienteUpdateRequest)
-        {
-            try
-            {
-                _clienteService.Update(id, clienteUpdateRequest);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpDelete("cliente/{id}")]
-        public IActionResult DeleteCliente([FromRoute] int id)
-        {
-            try
-            {
-                _clienteService.Delete(id);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpGet("cliente/all")]
-        public ActionResult<List<ClienteDto>> GetAllClientes()
-        {
-            return _clienteService.GetAll();
-        }
-
-        [HttpGet("cliente/full-data")]
-        public ActionResult<List<Cliente>> GetAllClientesFullData()
-        {
-            return _clienteService.GetAllFullData();
-        }
-
-        [HttpGet("cliente/{id}")]
-        public ActionResult<ClienteDto> GetClienteById([FromRoute] int id)
-        {
-            try
-            {
-                return _clienteService.GetById(id);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        
         [HttpPost]
         public IActionResult Create([FromBody] DuenoCreateRequest dueñoCreateRequest)
         {
@@ -154,8 +90,22 @@ namespace web.Controllers
             }
         }
 
-        
-        [HttpPut("{reservaId}/cancelar-reserva/")]
+        [HttpPut("{reservaId}/aceptar-reserva")]
+        public IActionResult AceptarReserva([FromRoute] int reservaId)
+        {
+            try
+            {
+                _duenoService.AceptarReserva(reservaId);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
+        [HttpPut("{reservaId}/cancelar-reserva")]
         public IActionResult CancelarReserva([FromRoute] int reservaId)
         {
             try
@@ -170,22 +120,10 @@ namespace web.Controllers
         }
 
         
-        [HttpPut("{reservaId}/aceptar-reserva/")]
-        public IActionResult AceptarReserva([FromRoute] int reservaId)
-        {
-            try
-            {
-                _duenoService.AceptarReserva(reservaId);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        
 
         
-        [HttpPost("/crear-guarderia/")]
+        [HttpPost("crear-guarderia")]
         public IActionResult CrearGuarderia([FromBody] GuarderiaCreateRequest guarderiaCreateRequest)
         {
             try
@@ -199,12 +137,20 @@ namespace web.Controllers
             }
         }
 
-        
-        [HttpGet("{guarderiaId}/lista-reservas-pendientes/")]
+
+        [HttpGet("{guarderiaId}/lista-reservas-pendientes")]
         public ActionResult<List<ReservaDto>> ListarReservasPendientes(int guarderiaId)
         {
-            return _duenoService.ListarReservasPendientes(guarderiaId);
+            try
+            {
+                return _duenoService.ListarReservasPendientes(guarderiaId);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
+
 
         //endpoints recien agregados
         [HttpPost("{reservaId}/enviar-mensaje-al-cliente")]

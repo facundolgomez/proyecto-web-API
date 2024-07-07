@@ -40,12 +40,10 @@ namespace Domain.Entities
 
         [Required]
         public UserRole UserRole { get; set; }
-        public ICollection<Notificacion> Notificaciones { get; set; }
 
-
-
-
-
-
+        public virtual ICollection<Notificacion> NotificacionesEnviadas { get; set; } // Notificaciones que ha enviado
+        public virtual ICollection<Notificacion> NotificacionesRecibidas { get; set; } // Notificaciones que ha recibido
     }
+
 }
+

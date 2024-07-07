@@ -18,20 +18,20 @@ namespace Application.Services
             _notificacionRepository = notificacionRepository;
             _mapper = mapper;   
         }
-        
-        public NotificacionDto EnviarNotificacion(int usuarioId, string mensaje)
+
+        public void EnviarNotificacion(int clienteId, int duenoGuarderiaId, string mensaje)
         {
             var notificacion = new Notificacion
             {
-                UsuarioId = usuarioId,
+                RemitenteId = clienteId,
+                RemitenteRole = UserRole.Cliente,
+                DestinatarioId = duenoGuarderiaId,
+                DestinatarioRole = UserRole.Dueno,
                 Mensaje = mensaje,
                 FechaCreado = DateTime.Now,
-                EstadoReserva = EstadoReserva.Pendiente
-
             };
 
             _notificacionRepository.Add(notificacion);
-            return _mapper.Map<NotificacionDto>(notificacion);
         }
 
         public void MarcarComoLeido(int notificacionId)
@@ -39,10 +39,17 @@ namespace Application.Services
             var notificacion = _notificacionRepository.GetById(notificacionId);
             if (notificacion != null)
             {
-                notificacion.EstadoReserva = EstadoReserva.Pendiente;
+                notificacion.EstadoMensaje = EstadoMensaje.Leido;
                 _notificacionRepository.Update(notificacion);
             }
         }
+
+
+
+
+
+
+
     }
 }
 

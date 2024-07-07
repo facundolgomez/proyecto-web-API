@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,12 +19,12 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    NombreUsuario = table.Column<string>(type: "TEXT", nullable: false),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    Apellido = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Contrasena = table.Column<string>(type: "TEXT", nullable: false),
-                    Direccion = table.Column<string>(type: "TEXT", nullable: false),
+                    NombreUsuario = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Nombre = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Apellido = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Contrasena = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Direccion = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     UserRole = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -71,7 +71,39 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_Mascotas_Usuarios_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Usuarios",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RemitenteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RemitenteRole = table.Column<string>(type: "TEXT", nullable: false),
+                    DestinatarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DestinatarioRole = table.Column<string>(type: "TEXT", nullable: false),
+                    Mensaje = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EstadoMensaje = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notificaciones_Usuarios_DestinatarioId",
+                        column: x => x.DestinatarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Notificaciones_Usuarios_RemitenteId",
+                        column: x => x.RemitenteId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,41 +138,13 @@ namespace Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Notificaciones",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Mensaje = table.Column<string>(type: "TEXT", nullable: false),
-                    FechaCreado = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EstadoReserva = table.Column<string>(type: "TEXT", nullable: false),
-                    ReservaId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notificaciones_Reservas_ReservaId",
-                        column: x => x.ReservaId,
-                        principalTable: "Reservas",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Notificaciones_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Usuarios",
                 columns: new[] { "Id", "Apellido", "Contrasena", "Direccion", "Email", "Nombre", "NombreUsuario", "UserRole" },
                 values: new object[,]
                 {
-                    { 1, "", "9876", "", "", "", "facu123", "Cliente" },
-                    { 2, "", "contraseña2", "", "", "", "usuario2", "Dueno" }
+                    { 1, "Gomez", "9876", "Oroño 2436", "facugomez@gmail.com", "Facundo", "facu123", "Cliente" },
+                    { 2, "Gerosa", "contraseña2", "Salta 3572", "marianogerosa@gmail.com", "Mariano", "usuario2", "Dueno" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -154,15 +158,14 @@ namespace Infrastructure.Data.Migrations
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notificaciones_ReservaId",
+                name: "IX_Notificaciones_DestinatarioId",
                 table: "Notificaciones",
-                column: "ReservaId",
-                unique: true);
+                column: "DestinatarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notificaciones_UsuarioId",
+                name: "IX_Notificaciones_RemitenteId",
                 table: "Notificaciones",
-                column: "UsuarioId");
+                column: "RemitenteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_GuarderiaId",
