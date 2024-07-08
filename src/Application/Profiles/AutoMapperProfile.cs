@@ -14,8 +14,9 @@ namespace Application.Profiles
             //asi funciona desde cada origen a destino
             CreateMap<ClienteCreateRequest, Cliente>(); 
             CreateMap<ClienteUpdateRequest, Cliente>();
-            CreateMap<Cliente, ClienteDto>();
-            
+            CreateMap<Cliente, ClienteDto>()
+                .ForMember(dest => dest.Mascotas, opt => opt.MapFrom(src => src.Mascotas));
+
             CreateMap<DuenoCreateRequest, Dueno>();
             CreateMap<DuenoUpdateRequest, Dueno>();
             CreateMap<Dueno, DuenoDto>();
@@ -26,7 +27,8 @@ namespace Application.Profiles
 
             CreateMap<MascotaCreateRequest, Mascota>();
             CreateMap<MascotaUpdateRequest, Mascota>();
-            CreateMap<Mascota, MascotaDto>();
+            CreateMap<Mascota, MascotaDto>()
+            .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre));
 
             CreateMap<ReservaCreateRequest, Reserva>();
             CreateMap<ReservaUpdateRequest, Reserva>();

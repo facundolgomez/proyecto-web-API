@@ -48,5 +48,15 @@ public class GenericRepository<T> : IRepository<T> where T : class //repositorio
         _context.SaveChanges();
     }
 
-    
+    public IQueryable<T> GetClientsWithPets(params Expression<Func<T, object>>[] includeProperties)
+    {
+        IQueryable<T> query = _dbSet;
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+        return query;
+    }
+
+
 }

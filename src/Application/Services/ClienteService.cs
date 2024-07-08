@@ -73,14 +73,16 @@ namespace Application.Services
             return _mapper.Map<List<ClienteDto>>(clientes);
         }
 
+
         public List<Cliente> GetClientsWithPets()
         {
-            return _clienteRepository.GetAll();
+            var clientes = _clienteRepository.GetClientsWithPets(c => c.Mascotas).ToList();
+            return _mapper.Map<List<Cliente>>(clientes);
         }
 
-        
 
-        
+
+
 
         public void AsignarMascota(int clienteId, int mascotaId)
         {

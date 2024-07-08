@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace Domain.Interfaces
         List<T> GetAll();
         T? GetById(int id);
         void SaveChanges();
-        void Update(T entity);  
+        void Update(T entity);
+        IQueryable<T> GetClientsWithPets(params Expression<Func<T, object>>[] includeProperties);
     }
 }
