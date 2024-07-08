@@ -4,46 +4,68 @@ using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
 using AutoMapper;
+using Domain.Exceptions;
 
 namespace Application.Services
 {
-    public class MascotaService : IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>
-    {
-        private readonly GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> _genericService;
 
-        public MascotaService(IRepository<Mascota> repository, IMapper mapper)
+    public class MascotaService : IMascotaService
+    {
+        private readonly IRepository<Mascota> _mascotaRepository;
+        private readonly IMapper _mapper;
+
+        public MascotaService(IRepository<Mascota> mascotaRepository, IMapper mapper)
         {
-            _genericService = new GenericService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto>(repository, mapper);
+            _mascotaRepository = mascotaRepository;
+            _mapper = mapper;
         }
 
         public MascotaDto Create(MascotaCreateRequest mascotaCreateRequest)
         {
-            return _genericService.Create(mascotaCreateRequest);
+            var mascota = _mapper.Map<Mascota>(mascotaCreateRequest);
+            _mascotaRepository.Add(mascota);
+            return _mapper.Map<MascotaDto>(mascota);
         }
 
         public void Delete(int id)
         {
-            _genericService.Delete(id);
+            var mascota = _mascotaRepository.GetById(id);
+            if (mascota == null)
+            {
+                throw new NotFoundException($"No se encontró la mascota con el ID {id}");
+            }
+            _mascotaRepository.Delete(mascota);
         }
 
         public List<MascotaDto> GetAll()
         {
-            return _genericService.GetAll();
+            var mascotas = _mascotaRepository.GetAll();
+            return _mapper.Map<List<MascotaDto>>(mascotas);
         }
 
         public List<Mascota> GetAllFullData()
         {
-            return _genericService.GetAllFullData();
+            return _mascotaRepository.GetAll().ToList();
         }
 
         public MascotaDto GetById(int id)
         {
-            return _genericService.GetById(id);
+            var mascota = _mascotaRepository.GetById(id);
+            return _mapper.Map<MascotaDto>(mascota);
         }
 
         public void Update(int id, MascotaUpdateRequest mascotaUpdateRequest)
         {
-            _genericService.Update(id, mascotaUpdateRequest);
+            var mascota = _mascotaRepository.GetById(id);
+            if (mascota == null)
+            {
+                throw new NotFoundException($"No se encontró la mascota con el ID {id}");
+            }
+
+            _mapper.Map(mascotaUpdateRequest, mascota);
+
+
+            _mascotaRepository.Update(mascota);
         }
     }
 }

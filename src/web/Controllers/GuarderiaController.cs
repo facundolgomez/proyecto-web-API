@@ -58,7 +58,7 @@ namespace web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public ActionResult<List<GuarderiaDto>> GetAll()
         {
             return _guarderiaService.GetAll();

@@ -19,6 +19,7 @@ namespace Application.Models
         public string Email { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
         public UserRole UserRole { get; set; }
+        
 
 
         public static DuenoDto Create(Dueno dueno)
@@ -31,6 +32,7 @@ namespace Application.Models
             dto.Email = dueno.Email;
             dto.Direccion = dueno.Direccion;
             dto.UserRole = dueno.UserRole;
+            
 
             return dto;
         }

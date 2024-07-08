@@ -22,5 +22,7 @@ namespace Infrastructure.Data
         {
             return _context.Mascotas.Include(m => m.Cliente).FirstOrDefault(m => m.Id == id);
         }
+
+        
     }
 }

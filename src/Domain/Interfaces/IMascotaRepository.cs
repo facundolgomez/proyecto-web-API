@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public interface IMascotaRepository : IRepository<Mascota>
     {
         Mascota GetByIdWithCliente(int id);
+        
     }
 }

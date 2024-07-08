@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class mymigrationx : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -143,8 +143,9 @@ namespace Infrastructure.Data.Migrations
                 columns: new[] { "Id", "Apellido", "Contrasena", "Direccion", "Email", "Nombre", "NombreUsuario", "UserRole" },
                 values: new object[,]
                 {
-                    { 1, "Gomez", "9876", "Oroño 2436", "facugomez@gmail.com", "Facundo", "facu123", "Cliente" },
-                    { 2, "Gerosa", "contraseña2", "Salta 3572", "marianogerosa@gmail.com", "Mariano", "usuario2", "Dueno" }
+                    { 1, "Gomez", "9876", "Oroño 2436", "facugomez@gmail.com", "Facundo", "facu123", "SysAdmin" },
+                    { 2, "Gerosa", "contraseña2", "Salta 3572", "marianogerosa@gmail.com", "Mariano", "usuario2", "Dueno" },
+                    { 3, "Balduini", "matexd", "Corrientes 2493", "francoxd@gmail.com", "Franco", "usuario3", "Cliente" }
                 });
 
             migrationBuilder.CreateIndex(

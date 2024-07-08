@@ -9,8 +9,15 @@ using Domain.Entities;
 
 namespace Application.Interfaces
 {
-    public interface IGuarderiaService : IService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>
+    public interface IGuarderiaService
     {
+        GuarderiaDto Create(GuarderiaCreateRequest guarderiaCreateRequest);
+        void Update(int id, GuarderiaUpdateRequest guarderiaUpdateRequest);
+        void Delete(int id);
+        List<GuarderiaDto> GetAll();
+        List<Guarderia> GetAllFullData();
+        GuarderiaDto GetById(int id);
+
         public void AsignarReserva(int guarderiaId, int reservaId);
     }
 }

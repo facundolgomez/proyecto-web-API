@@ -25,6 +25,8 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+       
+
     });
 #endregion
 
@@ -82,9 +84,11 @@ builder.Services.AddAuthentication("Bearer")
 // configuración de autorización basada en roles
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Cliente", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.Dueno.ToString()));
-    options.AddPolicy("Dueno", policy => policy.RequireRole(UserRole.Dueno.ToString()));
-    options.AddPolicy("ClienteODueno", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.Dueno.ToString()));
+    options.AddPolicy("Cliente", policy => policy.RequireRole(UserRole.Cliente.ToString(), UserRole.SysAdmin.ToString()));
+    options.AddPolicy("Dueno", policy => policy.RequireRole(UserRole.Dueno.ToString(), UserRole.SysAdmin.ToString()));
+    options.AddPolicy("SysAdmin", policy => policy.RequireRole(UserRole.SysAdmin.ToString()));
+
+
 });
 
 #endregion
@@ -109,22 +113,19 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 #endregion
 
 #region Repositories
-
-//configuracion del repositorio generico
-builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();    
 builder.Services.AddScoped<INotificacionRepository, NotificacionRepository>();
 builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 
 #endregion
 
 #region Services
-builder.Services.AddScoped(typeof(IService<,,,>), typeof(GenericService<,,,>));
-
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IDuenoService, DuenoService>();
 builder.Services.AddScoped<IGuarderiaService, GuarderiaService>();
+builder.Services.AddScoped<IMascotaService, MascotaService>();  
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<INotificacionService, NotificacionService>();
 #endregion

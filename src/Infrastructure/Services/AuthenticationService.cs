@@ -34,7 +34,7 @@ namespace Infrastructure.Services
 
             if (user == null) return null;
 
-            if ((user.UserRole == UserRole.Dueno || user.UserRole == UserRole.Cliente) && user.Contrasena == authenticationRequest.Contrasena)
+            if ((user.UserRole == UserRole.Dueno || user.UserRole == UserRole.Cliente || user.UserRole == UserRole.SysAdmin) && user.Contrasena == authenticationRequest.Contrasena)
             {
                 return user;
             }

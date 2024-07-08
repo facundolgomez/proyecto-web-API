@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240707213305_initialMigration")]
-    partial class initialMigration
+    [Migration("20240708204415_mymigrationx")]
+    partial class mymigrationx
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,13 +214,13 @@ namespace Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Apellido = "Gomez",
-                            Contrasena = "9876",
-                            Direccion = "Oroño 2436",
-                            Email = "facugomez@gmail.com",
-                            Nombre = "Facundo",
-                            NombreUsuario = "facu123",
+                            Id = 3,
+                            Apellido = "Balduini",
+                            Contrasena = "matexd",
+                            Direccion = "Corrientes 2493",
+                            Email = "francoxd@gmail.com",
+                            Nombre = "Franco",
+                            NombreUsuario = "usuario3",
                             UserRole = "Cliente"
                         });
                 });
@@ -244,6 +244,26 @@ namespace Infrastructure.Data.Migrations
                             Nombre = "Mariano",
                             NombreUsuario = "usuario2",
                             UserRole = "Dueno"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Entities.SysAdmin", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Usuario");
+
+                    b.HasDiscriminator().HasValue("SysAdmin");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Apellido = "Gomez",
+                            Contrasena = "9876",
+                            Direccion = "Oroño 2436",
+                            Email = "facugomez@gmail.com",
+                            Nombre = "Facundo",
+                            NombreUsuario = "facu123",
+                            UserRole = "SysAdmin"
                         });
                 });
 

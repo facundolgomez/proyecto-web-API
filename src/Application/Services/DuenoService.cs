@@ -7,18 +7,30 @@ using AutoMapper;
 using Domain.Exceptions;
 using Domain.Enums;
 
+ 
+
+
 namespace Application.Services
 {
+
     public class DuenoService : IDuenoService
     {
-        private readonly GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto> _genericService;
+        
+        private readonly IRepository<Dueno> _duenoRepository;
         private readonly IRepository<Reserva> _reservaRepository;
         private readonly IRepository<Guarderia> _guarderiaRepository;
         private readonly INotificacionRepository _notificacionRepository;
         private readonly IMapper _mapper;
-        public DuenoService(IRepository<Dueno> repository, IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository, INotificacionRepository notificacionRepository, IMapper mapper)
+
+        public DuenoService(
+            IRepository<Dueno> duenoRepository,
+            IRepository<Reserva> reservaRepository,
+            IRepository<Guarderia> guarderiaRepository,
+            INotificacionRepository notificacionRepository,
+            IMapper mapper)
         {
-            _genericService = new GenericService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>(repository, mapper);
+            
+            _duenoRepository = duenoRepository;
             _reservaRepository = reservaRepository;
             _guarderiaRepository = guarderiaRepository;
             _notificacionRepository = notificacionRepository;
@@ -27,35 +39,52 @@ namespace Application.Services
 
         public DuenoDto Create(DuenoCreateRequest duenoCreateRequest)
         {
-            return _genericService.Create(duenoCreateRequest);
+            var dueno = _mapper.Map<Dueno>(duenoCreateRequest);
+            _duenoRepository.Add(dueno);
+            return _mapper.Map<DuenoDto>(dueno);
         }
 
         public void Delete(int id)
         {
-            _genericService.Delete(id);
+            var dueno = _duenoRepository.GetById(id);
+            if (dueno == null)
+            {
+                throw new NotFoundException($"No se encontró el dueño con el id {id}");
+            }
+            _duenoRepository.Delete(dueno);
         }
 
         public List<DuenoDto> GetAll()
         {
-            return _genericService.GetAll();
+            var duenos = _duenoRepository.GetAll();
+            return _mapper.Map<List<DuenoDto>>(duenos);
         }
 
         public List<Dueno> GetAllFullData()
         {
-            return _genericService.GetAllFullData();
+            return _duenoRepository.GetAll();
         }
 
         public DuenoDto GetById(int id)
         {
-            return _genericService.GetById(id);
+            var dueno = _duenoRepository.GetById(id);
+            if (dueno == null)
+            {
+                throw new NotFoundException($"No se encontró el dueño con el id {id}");
+            }
+            return _mapper.Map<DuenoDto>(dueno);
         }
 
         public void Update(int id, DuenoUpdateRequest duenoUpdateRequest)
         {
-            _genericService.Update(id, duenoUpdateRequest);
+            var dueno = _duenoRepository.GetById(id);
+            if (dueno == null)
+            {
+                throw new NotFoundException($"No se encontró el dueño con el id {id}");
+            }
+            _mapper.Map(duenoUpdateRequest, dueno);
+            _duenoRepository.Update(dueno);
         }
-
-
 
         public void AceptarReserva(int reservaId)
         {
@@ -63,7 +92,6 @@ namespace Application.Services
             if (reserva == null)
             {
                 throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
-
             }
             reserva.Estado = EstadoReserva.Aprobada;
             _reservaRepository.Update(reserva);
@@ -75,14 +103,9 @@ namespace Application.Services
             if (reserva == null)
             {
                 throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
-
             }
-
             reserva.Estado = EstadoReserva.Rechazada;
             _reservaRepository.Update(reserva);
-
-
-
         }
 
         public List<ReservaDto> ListarReservasPendientes(int guarderiaId)
@@ -90,8 +113,7 @@ namespace Application.Services
             var guarderia = _guarderiaRepository.GetById(guarderiaId);
             if (guarderia == null)
             {
-                throw new NotFoundException($"No se encontró la guarderia con el id {guarderiaId}");
-
+                throw new NotFoundException($"No se encontró la guardería con el id {guarderiaId}");
             }
 
             var reservasPendientes = guarderia.Reservas
@@ -112,13 +134,11 @@ namespace Application.Services
             var notificacion = _notificacionRepository.GetById(reservaId);
             if (notificacion == null)
             {
-                throw new NotFoundException($"No se encontró la notificacion con el id {reservaId}");
-
+                throw new NotFoundException($"No se encontró la notificación con el id {reservaId}");
             }
-            
+
             notificacion.Mensaje = mensaje;
             _notificacionRepository.Update(notificacion);
-
         }
 
         public List<NotificacionDto> VerNotificaciones(int duenoId)
@@ -126,6 +146,5 @@ namespace Application.Services
             var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId);
             return _mapper.Map<List<NotificacionDto>>(notificaciones);
         }
-
     }
 }

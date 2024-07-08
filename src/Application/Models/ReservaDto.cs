@@ -35,7 +35,7 @@ namespace Application.Models
 
         public static List<ReservaDto> CreateList(IEnumerable<Reserva> reservas)
         {
-            List<ReservaDto> listDto = [];
+            List<ReservaDto> listDto = new List<ReservaDto>();
             foreach (var reserva in reservas)
             {
                 listDto.Add(Create(reserva));

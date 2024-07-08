@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 public class GenericRepository<T> : IRepository<T> where T : class //repositorio generico
 {
@@ -46,4 +47,6 @@ public class GenericRepository<T> : IRepository<T> where T : class //repositorio
     {
         _context.SaveChanges();
     }
+
+    
 }

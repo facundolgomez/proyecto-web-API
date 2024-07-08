@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,6 @@ namespace Domain.Interfaces
         T Add(T entity);
         void Delete(T entity);  
         List<T> GetAll();
-
         T? GetById(int id);
         void SaveChanges();
         void Update(T entity);  

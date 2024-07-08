@@ -33,7 +33,8 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Usuario>()
                 .HasDiscriminator<UserRole>("UserRole")
                 .HasValue<Dueno>(UserRole.Dueno)
-                .HasValue<Cliente>(UserRole.Cliente);
+                .HasValue<Cliente>(UserRole.Cliente)
+                .HasValue<SysAdmin>(UserRole.SysAdmin);
 
             modelBuilder.Entity<Cliente>()
                 .ToTable("Usuarios");
@@ -166,20 +167,20 @@ namespace Infrastructure.Data
 
             //ACLARACION: al loguearse no poner el prefijo Bearer antes del token
             //poner directamente el token(creo que es porque swagger lo pone solo)
-            modelBuilder.Entity<Cliente>().HasData(
-            new Cliente
-            {
-                Id = 1,
-                NombreUsuario = "facu123",
-                Nombre = "Facundo",
-                Apellido = "Gomez",
-                Email = "facugomez@gmail.com",
-                Contrasena = "9876",
-                Direccion = "Oroño 2436",
-                UserRole = UserRole.Cliente,
-            }
+            modelBuilder.Entity<SysAdmin>().HasData(
+                new SysAdmin
+                {
+                    Id = 1,
+                    NombreUsuario = "facu123",
+                    Nombre = "Facundo",
+                    Apellido = "Gomez",
+                    Email = "facugomez@gmail.com",
+                    Contrasena = "9876",
+                    Direccion = "Oroño 2436",
+                    UserRole = UserRole.SysAdmin,
+                }
             );
-        
+
             modelBuilder.Entity<Dueno>().HasData(
                 new Dueno
                 {
@@ -191,11 +192,23 @@ namespace Infrastructure.Data
                     Contrasena = "contraseña2",
                     Direccion = "Salta 3572",
                     UserRole = UserRole.Dueno,
-
                 }
             );
 
-            
+            modelBuilder.Entity<Cliente>().HasData(
+                new Cliente
+                {
+                    Id = 3,
+                    NombreUsuario = "usuario3",
+                    Nombre = "Franco",
+                    Apellido = "Balduini",
+                    Email = "francoxd@gmail.com",
+                    Contrasena = "matexd",
+                    Direccion = "Corrientes 2493",
+                    UserRole = UserRole.Cliente,
+                }
+            );
+
 
 
             base.OnModelCreating(modelBuilder);

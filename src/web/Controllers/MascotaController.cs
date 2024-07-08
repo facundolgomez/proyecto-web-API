@@ -12,9 +12,9 @@ namespace web.Controllers
     [ApiController]
     public class MascotaController : ControllerBase
     {
-        private readonly IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> _mascotaService;
+        private readonly IMascotaService _mascotaService;
 
-        public MascotaController(IService<Mascota, MascotaCreateRequest, MascotaUpdateRequest, MascotaDto> mascotaService)
+        public MascotaController(IMascotaService mascotaService)
         {
             _mascotaService = mascotaService;
         }

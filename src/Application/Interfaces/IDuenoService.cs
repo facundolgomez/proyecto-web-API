@@ -10,14 +10,21 @@ using Domain.Enums;
 
 namespace Application.Interfaces
 {
-    public interface IDuenoService : IService<Dueno, DuenoCreateRequest, DuenoUpdateRequest, DuenoDto>
+    public interface IDuenoService
     {
+        DuenoDto Create(DuenoCreateRequest duenoCreateRequest);
+        void Delete(int id);
+        List<DuenoDto> GetAll();
+        List<Dueno> GetAllFullData();
+        DuenoDto GetById(int id);
+        void Update(int id, DuenoUpdateRequest duenoUpdateRequest);
+
+
         void AceptarReserva(int reservaId);
         void CancelarReserva(int reservaId);
         GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest);
         List<ReservaDto> ListarReservasPendientes(int guarderiaId);
         void EnviarMensajeAlCliente(int reservaId, string mensaje);
-
         List<NotificacionDto> VerNotificaciones(int duenoId);
     }
 }

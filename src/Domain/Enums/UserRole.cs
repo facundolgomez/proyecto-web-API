@@ -13,6 +13,9 @@ namespace Domain.Enums
         Dueno,
 
         [EnumMember(Value = "Cliente")]
-        Cliente
+        Cliente,
+        
+        [EnumMember(Value = "SysAdmin")]
+        SysAdmin
     }
 }

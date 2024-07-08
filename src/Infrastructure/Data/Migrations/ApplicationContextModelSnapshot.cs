@@ -211,13 +211,13 @@ namespace Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Apellido = "Gomez",
-                            Contrasena = "9876",
-                            Direccion = "Oroño 2436",
-                            Email = "facugomez@gmail.com",
-                            Nombre = "Facundo",
-                            NombreUsuario = "facu123",
+                            Id = 3,
+                            Apellido = "Balduini",
+                            Contrasena = "matexd",
+                            Direccion = "Corrientes 2493",
+                            Email = "francoxd@gmail.com",
+                            Nombre = "Franco",
+                            NombreUsuario = "usuario3",
                             UserRole = "Cliente"
                         });
                 });
@@ -241,6 +241,26 @@ namespace Infrastructure.Data.Migrations
                             Nombre = "Mariano",
                             NombreUsuario = "usuario2",
                             UserRole = "Dueno"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Entities.SysAdmin", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Usuario");
+
+                    b.HasDiscriminator().HasValue("SysAdmin");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Apellido = "Gomez",
+                            Contrasena = "9876",
+                            Direccion = "Oroño 2436",
+                            Email = "facugomez@gmail.com",
+                            Nombre = "Facundo",
+                            NombreUsuario = "facu123",
+                            UserRole = "SysAdmin"
                         });
                 });
 

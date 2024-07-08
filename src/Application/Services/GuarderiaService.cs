@@ -10,58 +10,76 @@ namespace Application.Services
 {
     public class GuarderiaService : IGuarderiaService
     {
-        private readonly GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto> _genericService;
+        private readonly IRepository<Guarderia> _guarderiaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
-        public GuarderiaService(IRepository<Guarderia> repository,IRepository<Reserva> reservaRepository, IMapper mapper)
+        private readonly IMapper _mapper;
+
+        public GuarderiaService(IRepository<Guarderia> guarderiaRepository, IRepository<Reserva> reservaRepository, IMapper mapper)
         {
-            _genericService = new GenericService<Guarderia, GuarderiaCreateRequest, GuarderiaUpdateRequest, GuarderiaDto>(repository, mapper);
+            _guarderiaRepository = guarderiaRepository;
             _reservaRepository = reservaRepository;
+            _mapper = mapper;
         }
 
         public GuarderiaDto Create(GuarderiaCreateRequest guarderiaCreateRequest)
         {
-            return _genericService.Create(guarderiaCreateRequest);
+            var guarderia = _mapper.Map<Guarderia>(guarderiaCreateRequest);
+            _guarderiaRepository.Add(guarderia);
+            return _mapper.Map<GuarderiaDto>(guarderia);
         }
 
         public void Delete(int id)
         {
-            _genericService.Delete(id);
+            var guarderia = _guarderiaRepository.GetById(id);
+            if (guarderia == null)
+                throw new NotFoundException($"No se encontró la guardería con el id {id}");
+
+            _guarderiaRepository.Delete(guarderia);
         }
 
         public List<GuarderiaDto> GetAll()
         {
-            return _genericService.GetAll();
+            var guarderias = _guarderiaRepository.GetAll();
+            return _mapper.Map<List<GuarderiaDto>>(guarderias);
         }
 
         public List<Guarderia> GetAllFullData()
         {
-            return _genericService.GetAllFullData();
+            return _guarderiaRepository.GetAll();
         }
 
         public GuarderiaDto GetById(int id)
         {
-            return _genericService.GetById(id);
+            var guarderia = _guarderiaRepository.GetById(id);
+            if (guarderia == null)
+                throw new NotFoundException($"No se encontró la guardería con el id {id}");
+
+            return _mapper.Map<GuarderiaDto>(guarderia);
         }
 
         public void Update(int id, GuarderiaUpdateRequest guarderiaUpdateRequest)
         {
-            _genericService.Update(id, guarderiaUpdateRequest);
+            var guarderia = _guarderiaRepository.GetById(id);
+            if (guarderia == null)
+                throw new NotFoundException($"No se encontró la guardería con el id {id}");
+
+            _mapper.Map(guarderiaUpdateRequest, guarderia);
+            _guarderiaRepository.Update(guarderia);
         }
 
         public void AsignarReserva(int guarderiaId, int reservaId)
         {
-            var guarderia = _genericService.GetById(guarderiaId);
+            var guarderia = _guarderiaRepository.GetById(guarderiaId);
             if (guarderia == null)
-                throw new NotFoundException($"No se encontro la guarderia con el id {guarderiaId}");
+                throw new NotFoundException($"No se encontró la guardería con el id {guarderiaId}");
 
             var reserva = _reservaRepository.GetById(reservaId);
             if (reserva == null)
-                throw new NotFoundException($"No se encontro la reserva con el id {reservaId}");
+                throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
 
-           
             reserva.GuarderiaId = guarderiaId;
             _reservaRepository.Update(reserva);
-
         }
     }
+
 }

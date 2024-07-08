@@ -6,16 +6,23 @@ using System.Collections.Generic;
 
 namespace Application.Interfaces
 {
-    //IClienteService hereda de la interfaz IService, esto lo hice 
-    //porque era necesario agregar metodos especificos mas allá de los genéricos
-    //(en este caso para cliente)
-    public interface IClienteService : IService<Cliente, ClienteCreateRequest, ClienteUpdateRequest, ClienteDto>
+    
+    public interface IClienteService
     {
+        ClienteDto Create(ClienteCreateRequest clienteCreateRequest);
+        void Delete(int id);
+        List<ClienteDto> GetAll();
+        List<Cliente> GetClientsWithPets();
+        ClienteDto GetById(int id);
+        void Update(int id, ClienteUpdateRequest clienteUpdateRequest);
+
+
         void AsignarMascota(int clienteId, int mascotaId);
-        ReservaDto CrearReserva(int clienteId, ReservaCreateRequest reservaCreateRequest);
+        ReservaDto CrearReserva(int mascotaId, ReservaCreateRequest reservaCreateRequest);
         void CancelarReserva(int reservaId);
         void EnviarMensajeAlDueno(int reservaId, string mensaje);
         List<NotificacionDto> VerNotificaciones(int clienteId);
-        
+
+
     }
 }
