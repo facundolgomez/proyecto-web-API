@@ -11,11 +11,13 @@ namespace Application.Services
 
     public class MascotaService : IMascotaService
     {
+        private readonly IMascotaRepository _mascotaRepositorySpecific;
         private readonly IRepository<Mascota> _mascotaRepository;
         private readonly IMapper _mapper;
 
-        public MascotaService(IRepository<Mascota> mascotaRepository, IMapper mapper)
+        public MascotaService(IRepository<Mascota> mascotaRepository, IMascotaRepository mascotaRepositorySpecific, IMapper mapper)
         {
+            _mascotaRepositorySpecific = mascotaRepositorySpecific;
             _mascotaRepository = mascotaRepository;
             _mapper = mapper;
         }
@@ -43,9 +45,10 @@ namespace Application.Services
             return _mapper.Map<List<MascotaDto>>(mascotas);
         }
 
-        public List<Mascota> GetAllFullData()
+        public List<MascotaDto> GetPetsWithReservations()
         {
-            return _mascotaRepository.GetAll().ToList();
+            var mascotas = _mascotaRepositorySpecific.GetPetsWithReservations().ToList();
+            return _mapper.Map<List<MascotaDto>>(mascotas);
         }
 
         public MascotaDto GetById(int id)

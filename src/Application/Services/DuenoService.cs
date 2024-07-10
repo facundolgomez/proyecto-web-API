@@ -15,7 +15,7 @@ namespace Application.Services
 
     public class DuenoService : IDuenoService
     {
-        
+        private readonly IRepository<Cliente> _clienteRepository;   
         private readonly IRepository<Dueno> _duenoRepository;
         private readonly IRepository<Reserva> _reservaRepository;
         private readonly IRepository<Guarderia> _guarderiaRepository;
@@ -23,13 +23,14 @@ namespace Application.Services
         private readonly IMapper _mapper;
 
         public DuenoService(
+            IRepository<Cliente> clienteRepository,
             IRepository<Dueno> duenoRepository,
             IRepository<Reserva> reservaRepository,
             IRepository<Guarderia> guarderiaRepository,
             INotificacionRepository notificacionRepository,
             IMapper mapper)
         {
-            
+            _clienteRepository = clienteRepository;
             _duenoRepository = duenoRepository;
             _reservaRepository = reservaRepository;
             _guarderiaRepository = guarderiaRepository;
@@ -129,21 +130,39 @@ namespace Application.Services
             return _mapper.Map<GuarderiaDto>(nuevaGuarderia);
         }
 
-        public void EnviarMensajeAlCliente(int reservaId, string mensaje)
+        public void EnviarMensajeAlCliente(int remitenteId, int clienteId, string mensaje)
         {
-            var notificacion = _notificacionRepository.GetById(reservaId);
-            if (notificacion == null)
-            {
-                throw new NotFoundException($"No se encontró la notificación con el id {reservaId}");
-            }
+            var cliente = _clienteRepository.GetById(clienteId);
 
-            notificacion.Mensaje = mensaje;
-            _notificacionRepository.Update(notificacion);
+            if (cliente == null)
+                throw new NotFoundException($"No se encontró el cliente con el id {clienteId}");
+
+            var remitente = _duenoRepository.GetById(remitenteId);
+            if (remitente == null)
+                throw new NotFoundException($"No se encontró el remitente con el id {remitenteId}");
+
+            var notificacion = new Notificacion
+            {
+                RemitenteId = remitenteId,
+                RemitenteRole = remitente.UserRole,
+                DestinatarioId = clienteId,
+                DestinatarioRole = cliente.UserRole,
+                Mensaje = mensaje,
+                FechaCreado = DateTime.Now,
+                EstadoMensaje = EstadoMensaje.Pendiente
+            };
+
+            _notificacionRepository.Add(notificacion);
         }
 
         public List<NotificacionDto> VerNotificaciones(int duenoId)
         {
             var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId);
+            foreach (var n in notificaciones)
+            {
+                n.EstadoMensaje = EstadoMensaje.Leido;
+            }
+            _notificacionRepository.SaveChanges();
             return _mapper.Map<List<NotificacionDto>>(notificaciones);
         }
     }

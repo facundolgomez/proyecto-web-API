@@ -10,7 +10,6 @@ namespace web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Dueno")]
     public class DuenoController : ControllerBase
     {
         private readonly IDuenoService _duenoService;
@@ -163,13 +162,13 @@ namespace web.Controllers
 
 
         //endpoints recien agregados
-        [HttpPost("{reservaId}/enviar-mensaje-al-cliente")]
+        [HttpPost("{remitenteId}/{clienteId}/enviar-mensaje-al-cliente")]
         [Authorize(Policy = "Dueno")]
-        public IActionResult EnviarMensajeAlCliente([FromRoute] int reservaId, [FromBody] string mensaje)
+        public IActionResult EnviarMensajeAlCliente([FromRoute] int remitenteId, [FromRoute] int clienteId, [FromBody] string mensaje)
         {
             try
             {
-                _duenoService.EnviarMensajeAlCliente(reservaId, mensaje);
+                _duenoService.EnviarMensajeAlCliente(remitenteId, clienteId, mensaje);
                 return NoContent();
             }
             catch (NotFoundException ex)

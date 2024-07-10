@@ -16,6 +16,6 @@ namespace Domain.Interfaces
         T? GetById(int id);
         void SaveChanges();
         void Update(T entity);
-        IQueryable<T> GetClientsWithPets(params Expression<Func<T, object>>[] includeProperties);
+        
     }
 }

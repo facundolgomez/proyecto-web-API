@@ -23,6 +23,11 @@ namespace Infrastructure.Data
             return _context.Mascotas.Include(m => m.Cliente).FirstOrDefault(m => m.Id == id);
         }
 
-        
+        public IQueryable<Mascota> GetPetsWithReservations()
+        {
+            return _context.Mascotas.Include(c => c.Reservas);
+        }
+
+
     }
 }

@@ -15,7 +15,9 @@ namespace Application.Interfaces
         void Update(int id, MascotaUpdateRequest mascotaUpdateRequest);
         void Delete(int id);
         List<MascotaDto> GetAll();
-        List<Mascota> GetAllFullData();
+        
         MascotaDto GetById(int id);
+
+        List<MascotaDto> GetPetsWithReservations();
     }
 }

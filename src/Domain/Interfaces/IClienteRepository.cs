@@ -2,15 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IMascotaRepository : IRepository<Mascota>
+    public interface IClienteRepository : IRepository<Cliente>
     {
-        Mascota GetByIdWithCliente(int id);
 
-        IQueryable<Mascota> GetPetsWithReservations();
+        IQueryable<Cliente> GetClientsWithPets();
     }
 }

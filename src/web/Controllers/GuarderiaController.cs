@@ -6,11 +6,13 @@ using Application.Models;
 using Domain.Exceptions;
 using Domain.Entities;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers 
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "SysAdmin")]
     public class GuarderiaController : ControllerBase 
     {
         private readonly IGuarderiaService _guarderiaService;

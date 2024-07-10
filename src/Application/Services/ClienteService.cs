@@ -11,7 +11,8 @@ namespace Application.Services
 {
     public class ClienteService : IClienteService
     {
-        
+        private readonly IClienteRepository _clienteRepositorySpecific;
+        private readonly IRepository<Dueno> _duenoRepository;
         private readonly IRepository<Cliente> _clienteRepository;
         private readonly IMascotaRepository _mascotaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
@@ -22,8 +23,10 @@ namespace Application.Services
 
         public ClienteService(IRepository<Cliente> clienteRepository, IMascotaRepository mascotaRepository,
             IRepository<Reserva> reservaRepository, IRepository<Guarderia> guarderiaRepository,
-            INotificacionRepository notificacionRepository, INotificacionService notificacionService, IMapper mapper)
+            INotificacionRepository notificacionRepository, INotificacionService notificacionService, IRepository<Dueno> duenoRepository, IClienteRepository clienteRepositorySpecific, IMapper mapper)
         {
+            _clienteRepositorySpecific = clienteRepositorySpecific;
+            _duenoRepository = duenoRepository; 
             _clienteRepository = clienteRepository;
             _mascotaRepository = mascotaRepository;
             _reservaRepository = reservaRepository;
@@ -74,10 +77,10 @@ namespace Application.Services
         }
 
 
-        public List<Cliente> GetClientsWithPets()
+        public List<ClienteDto> GetClientsWithPets()
         {
-            var clientes = _clienteRepository.GetClientsWithPets(c => c.Mascotas).ToList();
-            return _mapper.Map<List<Cliente>>(clientes);
+            var clientes = _clienteRepositorySpecific.GetClientsWithPets().ToList();
+            return _mapper.Map<List<ClienteDto>>(clientes);
         }
 
 
@@ -133,19 +136,39 @@ namespace Application.Services
             _reservaRepository.Update(reserva);
         }
 
-        public void EnviarMensajeAlDueno(int reservaId, string mensaje)
+        public void EnviarMensajeAlDueno(int remitenteId, int duenoId, string mensaje)
         {
-            var notificacion = _notificacionRepository.GetById(reservaId);
-            if (notificacion == null)
-                throw new NotFoundException($"No se encontró la notificación con el id {reservaId}");
+            var dueno = _duenoRepository.GetById(duenoId);
 
-            notificacion.Mensaje = mensaje;
-            _notificacionRepository.Update(notificacion);
+            if (dueno == null)
+                throw new NotFoundException($"No se encontró el dueño con el id {duenoId}");
+
+            var remitente = _clienteRepository.GetById(remitenteId); 
+            if (remitente == null)
+                throw new NotFoundException($"No se encontró el remitente con el id {remitenteId}");
+
+            var notificacion = new Notificacion
+            {
+                RemitenteId = remitenteId,
+                RemitenteRole = remitente.UserRole,
+                DestinatarioId = duenoId,
+                DestinatarioRole = dueno.UserRole,
+                Mensaje = mensaje,
+                FechaCreado = DateTime.Now,
+                EstadoMensaje = EstadoMensaje.Pendiente 
+            };
+
+            _notificacionRepository.Add(notificacion);
         }
 
         public List<NotificacionDto> VerNotificaciones(int clienteId)
         {
             var notificaciones = _notificacionRepository.GetByUsuarioId(clienteId);
+            foreach (var n in notificaciones)
+            {
+                n.EstadoMensaje = EstadoMensaje.Leido;
+            }
+            _notificacionRepository.SaveChanges();
             return _mapper.Map<List<NotificacionDto>>(notificaciones);
         }
     }

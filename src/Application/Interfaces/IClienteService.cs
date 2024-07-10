@@ -12,7 +12,7 @@ namespace Application.Interfaces
         ClienteDto Create(ClienteCreateRequest clienteCreateRequest);
         void Delete(int id);
         List<ClienteDto> GetAll();
-        List<Cliente> GetClientsWithPets();
+        List<ClienteDto> GetClientsWithPets();
         ClienteDto GetById(int id);
         void Update(int id, ClienteUpdateRequest clienteUpdateRequest);
 
@@ -20,9 +20,9 @@ namespace Application.Interfaces
         void AsignarMascota(int clienteId, int mascotaId);
         ReservaDto CrearReserva(int mascotaId, ReservaCreateRequest reservaCreateRequest);
         void CancelarReserva(int reservaId);
-        void EnviarMensajeAlDueno(int reservaId, string mensaje);
+        void EnviarMensajeAlDueno(int remitenteId, int duenoId,string mensaje);
         List<NotificacionDto> VerNotificaciones(int clienteId);
 
-
+        
     }
 }

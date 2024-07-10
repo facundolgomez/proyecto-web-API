@@ -77,7 +77,7 @@ namespace web.Controllers
 
         [HttpGet("[action]")]
         [Authorize(Policy = "SysAdmin")]
-        public ActionResult<List<Cliente>> GetAllFullData()
+        public ActionResult<List<ClienteDto>> GetAllFullData()
         {
             return _clienteService.GetClientsWithPets();
         }
@@ -146,13 +146,13 @@ namespace web.Controllers
         }
 
         //endpoints recien agregados
-        [HttpPost("{reservaId}/enviar-mensaje-al-dueno")]
+        [HttpPost("{remitenteId}/{duenoId}enviar-mensaje-al-dueno")]
         [Authorize(Policy = "Cliente")]
-        public IActionResult EnviarMensajeAlDueno([FromRoute] int reservaId, [FromBody] string mensaje)
+        public IActionResult EnviarMensajeAlDueno([FromRoute] int remitenteId, [FromRoute] int duenoId, [FromBody] string mensaje)
         {
             try
             {
-                _clienteService.EnviarMensajeAlDueno(reservaId, mensaje);
+                _clienteService.EnviarMensajeAlDueno(remitenteId, duenoId, mensaje);
                 return NoContent();
             }
             catch (NotFoundException ex)

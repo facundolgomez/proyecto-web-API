@@ -5,11 +5,13 @@ using Application.Models.Requests;
 using Application.Models;
 using Domain.Exceptions;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "SysAdmin")]
     public class MascotaController : ControllerBase
     {
         private readonly IMascotaService _mascotaService;
@@ -66,9 +68,9 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
-        public ActionResult<List<Mascota>> GetAllFullData()
+        public ActionResult<List<MascotaDto>> GetAllFullData()
         {
-            return _mascotaService.GetAllFullData();
+            return _mascotaService.GetPetsWithReservations();
         }
 
 

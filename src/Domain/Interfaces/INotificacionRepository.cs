@@ -9,5 +9,6 @@ namespace Application.Interfaces
         void Update(Notificacion notificacion);
         Notificacion GetById(int id);
         List<Notificacion> GetByUsuarioId(int usuarioId);
+        void SaveChanges();
     }
 }

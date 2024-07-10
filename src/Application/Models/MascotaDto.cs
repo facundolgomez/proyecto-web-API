@@ -16,7 +16,9 @@ namespace Application.Models
         public string Nombre { get; set; } = string.Empty;
 
         public TipoMascota TipoMascota { get; set; }
-        
+
+        public List<ReservaDto> Reservas { get; set; } = new List<ReservaDto>();
+
 
         public static MascotaDto Create(Mascota mascota)
         {
@@ -24,6 +26,7 @@ namespace Application.Models
             dto.Id = mascota.Id;
             dto.Nombre = mascota.Nombre;
             dto.TipoMascota = mascota.TipoMascota;
+            dto.Reservas = mascota.Reservas.Select(r => ReservaDto.Create(r)).ToList();
 
 
             return dto;
