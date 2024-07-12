@@ -27,7 +27,7 @@ namespace web.Controllers
         {
             var newObj = _guarderiaService.Create(guarderiaCreateRequest);
 
-            return CreatedAtAction(nameof(Get), new { id = newObj.Id }, newObj);
+            return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] GuarderiaUpdateRequest guarderiaUpdateRequest)
@@ -76,8 +76,8 @@ namespace web.Controllers
 
 
 
-        [HttpGet("{id}")]
-        public ActionResult<GuarderiaDto> Get([FromRoute] int id)
+        [HttpGet("[action]/{id}")]
+        public ActionResult<GuarderiaDto> GetById([FromRoute] int id)
         {
             try
             {
@@ -89,19 +89,7 @@ namespace web.Controllers
             }
         }
 
-        [HttpPut("{guarderiaId}/asignar-reserva/{reservaId}")]
-        public IActionResult AsignarReserva([FromRoute] int guarderiaId, [FromRoute] int reservaId)
-        {
-            try
-            {
-                _guarderiaService.AsignarReserva(guarderiaId, reservaId);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        
     }
 
 }

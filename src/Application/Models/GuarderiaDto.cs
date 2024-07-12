@@ -16,7 +16,7 @@ namespace Application.Models
 
         public string Direccion { get; set; } = string.Empty ;
 
-        public float Precio { get; set; }   
+        public float PrecioPorHora { get; set; }   
         public int DuenoId { get; set; }    
 
         public static GuarderiaDto Create(Guarderia guarderia)
@@ -25,7 +25,7 @@ namespace Application.Models
             dto.Id = guarderia.Id;
             dto.Nombre = guarderia.Nombre;
             dto.Direccion = guarderia.Direccion;    
-            dto.Precio = guarderia.Precio;
+            dto.PrecioPorHora = guarderia.PrecioPorHora;
             dto.DuenoId = guarderia.DuenoId;    
             
 

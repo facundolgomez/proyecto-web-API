@@ -75,7 +75,7 @@ namespace web.Controllers
 
 
 
-        [HttpGet("{id}")]
+        [HttpGet("[action]/{id}")]
         public ActionResult<MascotaDto> GetById([FromRoute] int id)
         {
             try

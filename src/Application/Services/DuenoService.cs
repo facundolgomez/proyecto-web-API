@@ -125,8 +125,21 @@ namespace Application.Services
 
         public GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest)
         {
+            var dueno = _duenoRepository.GetById(guarderiaCreateRequest.DuenoId);
+
+            if (dueno == null)
+            {
+                throw new NotFoundException($"No se encontro un dueño con el id {guarderiaCreateRequest.DuenoId}");
+            }
+
+            if (dueno.UserRole != UserRole.Dueno)
+            {
+                throw new NotFoundException("Se debe asignar una guardería a un dueño valido.");
+            }
+
             var nuevaGuarderia = _mapper.Map<Guarderia>(guarderiaCreateRequest);
             _guarderiaRepository.Add(nuevaGuarderia);
+
             return _mapper.Map<GuarderiaDto>(nuevaGuarderia);
         }
 

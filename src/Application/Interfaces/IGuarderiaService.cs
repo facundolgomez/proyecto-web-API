@@ -18,6 +18,6 @@ namespace Application.Interfaces
         List<Guarderia> GetAllFullData();
         GuarderiaDto GetById(int id);
 
-        public void AsignarReserva(int guarderiaId, int reservaId);
+        
     }
 }

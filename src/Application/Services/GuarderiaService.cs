@@ -67,19 +67,7 @@ namespace Application.Services
             _guarderiaRepository.Update(guarderia);
         }
 
-        public void AsignarReserva(int guarderiaId, int reservaId)
-        {
-            var guarderia = _guarderiaRepository.GetById(guarderiaId);
-            if (guarderia == null)
-                throw new NotFoundException($"No se encontró la guardería con el id {guarderiaId}");
-
-            var reserva = _reservaRepository.GetById(reservaId);
-            if (reserva == null)
-                throw new NotFoundException($"No se encontró la reserva con el id {reservaId}");
-
-            reserva.GuarderiaId = guarderiaId;
-            _reservaRepository.Update(reserva);
-        }
+       
     }
 
 }
