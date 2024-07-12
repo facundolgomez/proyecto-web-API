@@ -24,7 +24,8 @@ namespace Application.Interfaces
         void CancelarReserva(int reservaId);
         GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest);
         List<ReservaDto> ListarReservasPendientes(int guarderiaId);
-        void EnviarMensajeAlCliente(int remitenteId, int clienteId,string mensaje);
+        void EnviarMensajeAlCliente(int remitenteId, int clienteId, string mensaje);
         List<NotificacionDto> VerNotificaciones(int duenoId);
     }
 }
+

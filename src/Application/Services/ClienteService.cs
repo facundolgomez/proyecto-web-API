@@ -155,7 +155,7 @@ namespace Application.Services
                 DestinatarioRole = dueno.UserRole,
                 Mensaje = mensaje,
                 FechaCreado = DateTime.Now,
-                EstadoMensaje = EstadoMensaje.Pendiente 
+                 
             };
 
             _notificacionRepository.Add(notificacion);

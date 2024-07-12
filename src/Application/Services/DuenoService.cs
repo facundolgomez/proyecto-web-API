@@ -165,12 +165,19 @@ namespace Application.Services
                 EstadoMensaje = EstadoMensaje.Pendiente
             };
 
+            
+
+           
+
             _notificacionRepository.Add(notificacion);
         }
 
         public List<NotificacionDto> VerNotificaciones(int duenoId)
         {
-            var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId);
+            var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId)
+                .Where(n => n.RemitenteRole.ToString() == "Cliente")
+                .ToList();
+
             foreach (var n in notificaciones)
             {
                 n.EstadoMensaje = EstadoMensaje.Leido;

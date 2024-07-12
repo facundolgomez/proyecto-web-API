@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class mymigrationx : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,7 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     Direccion = table.Column<string>(type: "TEXT", nullable: false),
-                    Precio = table.Column<float>(type: "REAL", nullable: false),
+                    PrecioPorHora = table.Column<float>(type: "REAL", nullable: false),
                     DuenoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
