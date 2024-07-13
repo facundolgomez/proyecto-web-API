@@ -15,6 +15,7 @@ namespace Application.Services
 
     public class DuenoService : IDuenoService
     {
+        private readonly IGuarderiaRepository _guarderiaRepositorySpecific;
         private readonly IRepository<Cliente> _clienteRepository;   
         private readonly IRepository<Dueno> _duenoRepository;
         private readonly IRepository<Reserva> _reservaRepository;
@@ -23,6 +24,7 @@ namespace Application.Services
         private readonly IMapper _mapper;
 
         public DuenoService(
+            IGuarderiaRepository guarderiaRepositorySpecific,
             IRepository<Cliente> clienteRepository,
             IRepository<Dueno> duenoRepository,
             IRepository<Reserva> reservaRepository,
@@ -30,6 +32,7 @@ namespace Application.Services
             INotificacionRepository notificacionRepository,
             IMapper mapper)
         {
+            _guarderiaRepositorySpecific = guarderiaRepositorySpecific; 
             _clienteRepository = clienteRepository;
             _duenoRepository = duenoRepository;
             _reservaRepository = reservaRepository;
@@ -111,7 +114,7 @@ namespace Application.Services
 
         public List<ReservaDto> ListarReservasPendientes(int guarderiaId)
         {
-            var guarderia = _guarderiaRepository.GetById(guarderiaId);
+            var guarderia = _guarderiaRepositorySpecific.GetReservasByGuarderiaId(guarderiaId);
             if (guarderia == null)
             {
                 throw new NotFoundException($"No se encontró la guardería con el id {guarderiaId}");
@@ -120,7 +123,7 @@ namespace Application.Services
             var reservasPendientes = guarderia.Reservas
                 .Where(r => r.Estado == EstadoReserva.Pendiente)
                 .ToList();
-            return ReservaDto.CreateList(reservasPendientes);
+            return _mapper.Map<List<ReservaDto>>(reservasPendientes);
         }
 
         public GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest)
