@@ -24,6 +24,10 @@ namespace Infrastructure.Data
                            .FirstOrDefault(g => g.Id == guarderiaId);
         }
 
+        public List<Guarderia> GetAllFullData()
+        {
+            return _context.Guarderias.Include(g => g.Dueno).ToList();
+        }
 
 
     }

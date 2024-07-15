@@ -122,6 +122,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IGuarderiaRepository, GuarderiaRepository>();
 
+
 #endregion
 
 #region Services

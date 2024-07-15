@@ -10,12 +10,14 @@ namespace Application.Services
 {
     public class GuarderiaService : IGuarderiaService
     {
+        private readonly IGuarderiaRepository _guarderiaRepositorySpecific;
         private readonly IRepository<Guarderia> _guarderiaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
         private readonly IMapper _mapper;
 
-        public GuarderiaService(IRepository<Guarderia> guarderiaRepository, IRepository<Reserva> reservaRepository, IMapper mapper)
+        public GuarderiaService(IRepository<Guarderia> guarderiaRepository, IRepository<Reserva> reservaRepository, IGuarderiaRepository guarderiaRepositorySpecific, IMapper mapper)
         {
+            _guarderiaRepositorySpecific = guarderiaRepositorySpecific; 
             _guarderiaRepository = guarderiaRepository;
             _reservaRepository = reservaRepository;
             _mapper = mapper;
@@ -43,10 +45,12 @@ namespace Application.Services
             return _mapper.Map<List<GuarderiaDto>>(guarderias);
         }
 
-        public List<Guarderia> GetAllFullData()
+        public List<GuarderiaDto> GetGuarderiasWithDuenos()
         {
-            return _guarderiaRepository.GetAll();
+            var guarderias = _guarderiaRepositorySpecific.GetAllFullData();
+            return GuarderiaDto.CreateList(guarderias);
         }
+
 
         public GuarderiaDto GetById(int id)
         {

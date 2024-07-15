@@ -69,9 +69,10 @@ namespace web.Controllers
 
 
         [HttpGet("[action]")]
-        public ActionResult<List<Guarderia>> GetAllFullData()
+        public ActionResult<List<GuarderiaDto>> GetAllFullData()
         {
-            return _guarderiaService.GetAllFullData();
+            var guarderias = _guarderiaService.GetGuarderiasWithDuenos();
+            return Ok(guarderias);
         }
 
 

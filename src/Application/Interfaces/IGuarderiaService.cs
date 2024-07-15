@@ -15,7 +15,7 @@ namespace Application.Interfaces
         void Update(int id, GuarderiaUpdateRequest guarderiaUpdateRequest);
         void Delete(int id);
         List<GuarderiaDto> GetAll();
-        List<Guarderia> GetAllFullData();
+        List<GuarderiaDto> GetGuarderiasWithDuenos();
         GuarderiaDto GetById(int id);
 
         
