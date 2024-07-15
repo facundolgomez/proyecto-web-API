@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 
@@ -18,7 +19,10 @@ namespace Application.Models
 
         public float PrecioPorHora { get; set; }   
         public int DuenoId { get; set; }
+        
         public string DuenoNombre { get; set; } = string.Empty;
+        
+        public int CantidadReservas { get; set; }
 
 
         public static GuarderiaDto Create(Guarderia guarderia)
@@ -30,7 +34,7 @@ namespace Application.Models
             dto.PrecioPorHora = guarderia.PrecioPorHora;
             dto.DuenoId = guarderia.DuenoId;
             dto.DuenoNombre = guarderia.Dueno != null ? $"{guarderia.Dueno.Nombre} {guarderia.Dueno.Apellido}" : string.Empty;
-
+            dto.CantidadReservas = guarderia.Reservas.Count;    
 
 
             return dto;

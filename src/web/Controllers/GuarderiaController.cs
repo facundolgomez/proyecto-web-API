@@ -25,9 +25,16 @@ namespace web.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] GuarderiaCreateRequest guarderiaCreateRequest)
         {
-            var newObj = _guarderiaService.Create(guarderiaCreateRequest);
+            try
+            {
+                var newObj = _guarderiaService.Create(guarderiaCreateRequest);
 
-            return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
+                return CreatedAtAction(nameof(GetById), new { id = newObj.Id }, newObj);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);  
+            }
         }
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] GuarderiaUpdateRequest guarderiaUpdateRequest)
@@ -71,7 +78,7 @@ namespace web.Controllers
         [HttpGet("[action]")]
         public ActionResult<List<GuarderiaDto>> GetAllFullData()
         {
-            var guarderias = _guarderiaService.GetGuarderiasWithDuenos();
+            var guarderias = _guarderiaService.GetAllFullData();
             return Ok(guarderias);
         }
 

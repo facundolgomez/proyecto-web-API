@@ -73,12 +73,7 @@ namespace web.Controllers
 
 
         
-        [HttpGet("[action]")]
-        [Authorize(Policy = "SysAdmin")]
-        public ActionResult<List<Dueno>> GetAllFullData()
-        {
-            return _duenoService.GetAllFullData();
-        }
+        
 
 
         [HttpGet("{id}")]

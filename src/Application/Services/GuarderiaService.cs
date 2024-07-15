@@ -10,13 +10,15 @@ namespace Application.Services
 {
     public class GuarderiaService : IGuarderiaService
     {
+        private readonly IRepository<Dueno> _duenoRepository;
         private readonly IGuarderiaRepository _guarderiaRepositorySpecific;
         private readonly IRepository<Guarderia> _guarderiaRepository;
         private readonly IRepository<Reserva> _reservaRepository;
         private readonly IMapper _mapper;
 
-        public GuarderiaService(IRepository<Guarderia> guarderiaRepository, IRepository<Reserva> reservaRepository, IGuarderiaRepository guarderiaRepositorySpecific, IMapper mapper)
+        public GuarderiaService(IRepository<Guarderia> guarderiaRepository, IRepository<Reserva> reservaRepository, IGuarderiaRepository guarderiaRepositorySpecific, IRepository<Dueno> duenoRepository, IMapper mapper)
         {
+            _duenoRepository = duenoRepository;
             _guarderiaRepositorySpecific = guarderiaRepositorySpecific; 
             _guarderiaRepository = guarderiaRepository;
             _reservaRepository = reservaRepository;
@@ -25,9 +27,29 @@ namespace Application.Services
 
         public GuarderiaDto Create(GuarderiaCreateRequest guarderiaCreateRequest)
         {
+            
+            var duenoGuarderia = _duenoRepository.GetById(guarderiaCreateRequest.DuenoId);
+            if (duenoGuarderia == null)
+            {
+                throw new NotFoundException($"No se encontró el dueno con el id {guarderiaCreateRequest.DuenoId}");
+            }
+
+            
             var guarderia = _mapper.Map<Guarderia>(guarderiaCreateRequest);
+
+            
+            guarderia.Dueno = duenoGuarderia;
+
+            
             _guarderiaRepository.Add(guarderia);
-            return _mapper.Map<GuarderiaDto>(guarderia);
+
+            
+            var guarderiaDto = _mapper.Map<GuarderiaDto>(guarderia);
+
+            
+            guarderiaDto.DuenoNombre = $"{duenoGuarderia.Nombre} {duenoGuarderia.Apellido}";
+
+            return guarderiaDto;
         }
 
         public void Delete(int id)
@@ -45,10 +67,10 @@ namespace Application.Services
             return _mapper.Map<List<GuarderiaDto>>(guarderias);
         }
 
-        public List<GuarderiaDto> GetGuarderiasWithDuenos()
+        public List<GuarderiaDto> GetAllFullData()
         {
             var guarderias = _guarderiaRepositorySpecific.GetAllFullData();
-            return GuarderiaDto.CreateList(guarderias);
+            return _mapper.Map<List<GuarderiaDto>>(guarderias);
         }
 
 

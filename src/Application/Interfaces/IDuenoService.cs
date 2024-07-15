@@ -15,7 +15,6 @@ namespace Application.Interfaces
         DuenoDto Create(DuenoCreateRequest duenoCreateRequest);
         void Delete(int id);
         List<DuenoDto> GetAll();
-        List<Dueno> GetAllFullData();
         DuenoDto GetById(int id);
         void Update(int id, DuenoUpdateRequest duenoUpdateRequest);
 

@@ -22,6 +22,7 @@ namespace Application.Models
         public string Direccion { get; set; } = string.Empty;
         public UserRole UserRole { get; set; }
         public List<MascotaDto> Mascotas { get; set; } = new List<MascotaDto>();
+        
 
         public static ClienteDto Create(Cliente cliente)
         {
@@ -34,6 +35,7 @@ namespace Application.Models
             dto.Direccion = cliente.Direccion;  
             dto.UserRole = cliente.UserRole;
             dto.Mascotas = cliente.Mascotas.Select(m => MascotaDto.Create(m)).ToList();
+           
 
             return dto;
         }

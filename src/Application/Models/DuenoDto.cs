@@ -22,6 +22,7 @@ namespace Application.Models
         
 
 
+
         public static DuenoDto Create(Dueno dueno)
         {
             var dto = new DuenoDto();
@@ -33,6 +34,9 @@ namespace Application.Models
             dto.Direccion = dueno.Direccion;
             dto.UserRole = dueno.UserRole;
             
+
+
+
 
             return dto;
         }

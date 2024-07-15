@@ -26,8 +26,20 @@ namespace Infrastructure.Data
 
         public List<Guarderia> GetAllFullData()
         {
-            return _context.Guarderias.Include(g => g.Dueno).ToList();
+            return _context.Guarderias
+            .Include(g => g.Dueno)
+            .Include(g => g.Reservas)
+            .ToList();
         }
+
+        public string GetDuenoNombre(int duenoId)
+        {
+            var dueno = _context.Duenos.FirstOrDefault(d => d.Id == duenoId);
+            return dueno != null ? $"{dueno.Nombre} {dueno.Apellido}" : string.Empty;
+        }
+
+
+
 
 
     }

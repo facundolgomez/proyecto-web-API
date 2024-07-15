@@ -15,6 +15,7 @@ namespace Application.Services
 
     public class DuenoService : IDuenoService
     {
+           
         private readonly IGuarderiaRepository _guarderiaRepositorySpecific;
         private readonly IRepository<Cliente> _clienteRepository;   
         private readonly IRepository<Dueno> _duenoRepository;
@@ -24,6 +25,7 @@ namespace Application.Services
         private readonly IMapper _mapper;
 
         public DuenoService(
+            
             IGuarderiaRepository guarderiaRepositorySpecific,
             IRepository<Cliente> clienteRepository,
             IRepository<Dueno> duenoRepository,
@@ -64,10 +66,6 @@ namespace Application.Services
             return _mapper.Map<List<DuenoDto>>(duenos);
         }
 
-        public List<Dueno> GetAllFullData()
-        {
-            return _duenoRepository.GetAll();
-        }
 
         public DuenoDto GetById(int id)
         {

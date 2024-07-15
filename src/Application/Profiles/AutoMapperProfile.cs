@@ -12,7 +12,7 @@ namespace Application.Profiles
         {
             //cuando AutoMapper encuentra un objeto ClienteCreateRequest debe mapearlo a un entidad Cliente
             //asi funciona desde cada origen a destino
-            CreateMap<ClienteCreateRequest, Cliente>(); 
+            CreateMap<ClienteCreateRequest, Cliente>();
             CreateMap<ClienteUpdateRequest, Cliente>();
             CreateMap<Cliente, ClienteDto>()
                 .ForMember(dest => dest.Mascotas, opt => opt.MapFrom(src => src.Mascotas));
@@ -23,7 +23,10 @@ namespace Application.Profiles
 
             CreateMap<GuarderiaCreateRequest, Guarderia>();
             CreateMap<GuarderiaUpdateRequest, Guarderia>();
-            CreateMap<Guarderia, GuarderiaDto>();
+            CreateMap<Guarderia, GuarderiaDto>()
+                .ForMember(dest => dest.DuenoNombre, opt => opt.MapFrom(src => src.Dueno != null ? $"{src.Dueno.Nombre} {src.Dueno.Apellido}" : string.Empty))
+                .ForMember(dest => dest.CantidadReservas, opt => opt.MapFrom(src => src.Reservas != null ? src.Reservas.Count : 0));
+
 
             CreateMap<MascotaCreateRequest, Mascota>();
             CreateMap<MascotaUpdateRequest, Mascota>();
@@ -38,4 +41,5 @@ namespace Application.Profiles
             CreateMap<Notificacion, NotificacionDto>();
         }
     }
+    
 }

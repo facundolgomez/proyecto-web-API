@@ -11,5 +11,7 @@ namespace Domain.Interfaces
     {
         public Guarderia? GetReservasByGuarderiaId(int guarderiaId);
         public List<Guarderia> GetAllFullData();
+
+        public string GetDuenoNombre(int duenoId);
     }
 }
