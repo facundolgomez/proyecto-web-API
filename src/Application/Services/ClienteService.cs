@@ -161,9 +161,25 @@ namespace Application.Services
             _notificacionRepository.Add(notificacion);
         }
 
-        public List<NotificacionDto> VerNotificaciones(int clienteId)
+
+        public List<NotificacionDto> VerNotificacionesEnviadas(int clienteId)
         {
-            var notificaciones = _notificacionRepository.GetByUsuarioId(clienteId);
+            var notificaciones = _notificacionRepository.GetByUsuarioId(clienteId)
+                .Where(n => n.RemitenteRole.ToString() == "Cliente")
+                .ToList();
+
+            return _mapper.Map<List<NotificacionDto>>(notificaciones);
+
+
+        }
+
+        public List<NotificacionDto> VerNotificacionesRecibidas(int clienteId)
+
+        {
+            var notificaciones = _notificacionRepository.GetByUsuarioId(clienteId)
+                .Where(n => n.RemitenteRole.ToString() == "Dueno")
+                .ToList();
+
             foreach (var n in notificaciones)
             {
                 n.EstadoMensaje = EstadoMensaje.Leido;
@@ -171,6 +187,8 @@ namespace Application.Services
             _notificacionRepository.SaveChanges();
             return _mapper.Map<List<NotificacionDto>>(notificaciones);
         }
+
+        
     }
 
 }

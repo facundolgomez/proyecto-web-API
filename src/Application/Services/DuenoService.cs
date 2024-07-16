@@ -173,7 +173,7 @@ namespace Application.Services
             _notificacionRepository.Add(notificacion);
         }
 
-        public List<NotificacionDto> VerNotificaciones(int duenoId)
+        public List<NotificacionDto> VerNotificacionesRecibidas(int duenoId)
         {
             var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId)
                 .Where(n => n.RemitenteRole.ToString() == "Cliente")
@@ -185,6 +185,17 @@ namespace Application.Services
             }
             _notificacionRepository.SaveChanges();
             return _mapper.Map<List<NotificacionDto>>(notificaciones);
+        }
+
+        public List<NotificacionDto> VerNotificacionesEnviadas(int duenoId)
+        {
+            var notificaciones = _notificacionRepository.GetByUsuarioId(duenoId)
+                .Where(n => n.RemitenteRole.ToString() == "Dueno")
+                .ToList();
+
+            return _mapper.Map<List<NotificacionDto>>(notificaciones);
+
+
         }
     }
 }

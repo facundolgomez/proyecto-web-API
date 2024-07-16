@@ -173,13 +173,28 @@ namespace web.Controllers
             }
         }
 
-        [HttpGet("{duenoId}/ver-notificaciones")]
+        [HttpGet("{duenoId}/ver-notificaciones-recibidas")]
         [Authorize(Policy = "Dueno")]
-        public ActionResult<List<NotificacionDto>> VerNotificaciones([FromRoute] int duenoId)
+        public ActionResult<List<NotificacionDto>> VerNotificacionesRecibidas([FromRoute] int duenoId)
         {
             try
             {
-                var notificaciones = _duenoService.VerNotificaciones(duenoId);
+                var notificaciones = _duenoService.VerNotificacionesRecibidas(duenoId);
+                return Ok(notificaciones);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("{duenoId}/ver-notificaciones-enviadas")]
+        [Authorize(Policy = "Dueno")]
+        public ActionResult<List<NotificacionDto>> VerNotificacionesEnviadas([FromRoute] int duenoId)
+        {
+            try
+            {
+                var notificaciones = _duenoService.VerNotificacionesEnviadas(duenoId);
                 return Ok(notificaciones);
             }
             catch (NotFoundException ex)

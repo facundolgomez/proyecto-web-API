@@ -21,7 +21,8 @@ namespace Application.Interfaces
         ReservaDto CrearReserva(int mascotaId, ReservaCreateRequest reservaCreateRequest);
         void CancelarReserva(int reservaId);
         void EnviarMensajeAlDueno(int remitenteId, int duenoId,string mensaje);
-        List<NotificacionDto> VerNotificaciones(int clienteId);
+        List<NotificacionDto> VerNotificacionesRecibidas(int clienteId);
+        List<NotificacionDto> VerNotificacionesEnviadas(int clienteId);
 
         
     }

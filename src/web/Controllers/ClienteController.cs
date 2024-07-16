@@ -161,13 +161,30 @@ namespace web.Controllers
             }
         }
 
-        [HttpGet("{clienteId}/ver-notificaciones")]
+        [HttpGet("{clienteId}/ver-notificaciones-enviadas")]
         [Authorize(Policy = "Cliente")]
-        public ActionResult<List<NotificacionDto>> VerNotificaciones([FromRoute] int clienteId)
+        public ActionResult<List<NotificacionDto>> VerNotificacionesEnviadas([FromRoute] int clienteId)
         {
             try
             {
-                var notificaciones = _clienteService.VerNotificaciones(clienteId);
+                var notificaciones = _clienteService.VerNotificacionesEnviadas(clienteId);
+                return Ok(notificaciones);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
+
+        [HttpGet("{clienteId}/ver-notificaciones-recibidas")]
+        [Authorize(Policy = "Cliente")]
+        public ActionResult<List<NotificacionDto>> VerNotificacionesRecibidas([FromRoute] int clienteId)
+        {
+            try
+            {
+                var notificaciones = _clienteService.VerNotificacionesRecibidas(clienteId);
                 return Ok(notificaciones);
             }
             catch (NotFoundException ex)
