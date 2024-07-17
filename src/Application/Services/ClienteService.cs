@@ -136,7 +136,7 @@ namespace Application.Services
             _reservaRepository.Update(reserva);
         }
 
-        public void EnviarMensajeAlDueno(int remitenteId, int duenoId, string mensaje)
+        public void EnviarMensajeAlDueno(int remitenteId, int duenoId, NotificacionRequest request)
         {
             var dueno = _duenoRepository.GetById(duenoId);
 
@@ -153,10 +153,19 @@ namespace Application.Services
                 RemitenteRole = remitente.UserRole,
                 DestinatarioId = duenoId,
                 DestinatarioRole = dueno.UserRole,
-                Mensaje = mensaje,
+                Mensaje = request.Mensaje,
                 FechaCreado = DateTime.Now,
                  
             };
+
+            if (request.NotificacionOriginalId.HasValue)
+            {
+                var notificacionOriginal = _notificacionRepository.GetById(request.NotificacionOriginalId.Value);
+                if (notificacionOriginal == null)
+                    throw new NotFoundException($"No se encontró la notificación original con el id {request.NotificacionOriginalId.Value}");
+
+                notificacionOriginal.EstadoMensaje = EstadoMensaje.Respondido;
+            }
 
             _notificacionRepository.Add(notificacion);
         }

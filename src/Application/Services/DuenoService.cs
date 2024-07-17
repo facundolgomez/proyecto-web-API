@@ -144,10 +144,9 @@ namespace Application.Services
             return _mapper.Map<GuarderiaDto>(nuevaGuarderia);
         }
 
-        public void EnviarMensajeAlCliente(int remitenteId, int clienteId, string mensaje)
+        public void EnviarMensajeAlCliente(int remitenteId, int clienteId, NotificacionRequest request)
         {
             var cliente = _clienteRepository.GetById(clienteId);
-
             if (cliente == null)
                 throw new NotFoundException($"No se encontró el cliente con el id {clienteId}");
 
@@ -161,16 +160,23 @@ namespace Application.Services
                 RemitenteRole = remitente.UserRole,
                 DestinatarioId = clienteId,
                 DestinatarioRole = cliente.UserRole,
-                Mensaje = mensaje,
+                Mensaje = request.Mensaje,
                 FechaCreado = DateTime.Now,
                 EstadoMensaje = EstadoMensaje.Pendiente
             };
 
             
+            if (request.NotificacionOriginalId.HasValue)
+            {
+                var notificacionOriginal = _notificacionRepository.GetById(request.NotificacionOriginalId.Value);
+                if (notificacionOriginal == null)
+                    throw new NotFoundException($"No se encontró la notificación original con el id {request.NotificacionOriginalId.Value}");
 
-           
+                notificacionOriginal.EstadoMensaje = EstadoMensaje.Respondido;
+            }
 
             _notificacionRepository.Add(notificacion);
+            
         }
 
         public List<NotificacionDto> VerNotificacionesRecibidas(int duenoId)

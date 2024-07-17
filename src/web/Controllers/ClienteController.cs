@@ -148,11 +148,15 @@ namespace web.Controllers
         //endpoints recien agregados
         [HttpPost("{remitenteId}/{duenoId}enviar-mensaje-al-dueno")]
         [Authorize(Policy = "Cliente")]
-        public IActionResult EnviarMensajeAlDueno([FromRoute] int remitenteId, [FromRoute] int duenoId, [FromBody] string mensaje)
+        public IActionResult EnviarMensajeAlDueno([FromRoute] int remitenteId, [FromRoute] int duenoId, [FromBody] NotificacionRequest request)
         {
             try
             {
-                _clienteService.EnviarMensajeAlDueno(remitenteId, duenoId, mensaje);
+                if (request.NotificacionOriginalId == 0)
+                {
+                    request.NotificacionOriginalId = null;
+                }
+                _clienteService.EnviarMensajeAlDueno(remitenteId, duenoId, request);
                 return NoContent();
             }
             catch (NotFoundException ex)

@@ -160,11 +160,15 @@ namespace web.Controllers
         
         [HttpPost("{remitenteId}/{clienteId}/enviar-mensaje-al-cliente")]
         [Authorize(Policy = "Dueno")]
-        public IActionResult EnviarMensajeAlCliente([FromRoute] int remitenteId, [FromRoute] int clienteId, [FromBody] string mensaje)
+        public IActionResult EnviarMensajeAlCliente([FromRoute] int remitenteId, [FromRoute] int clienteId, [FromBody] NotificacionRequest request)
         {
             try
             {
-                _duenoService.EnviarMensajeAlCliente(remitenteId, clienteId, mensaje);
+                if (request.NotificacionOriginalId == 0)
+                {
+                    request.NotificacionOriginalId = null;
+                }
+                _duenoService.EnviarMensajeAlCliente(remitenteId, clienteId, request);
                 return NoContent();
             }
             catch (NotFoundException ex)

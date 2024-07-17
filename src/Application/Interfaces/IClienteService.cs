@@ -20,7 +20,7 @@ namespace Application.Interfaces
         void AsignarMascota(int clienteId, int mascotaId);
         ReservaDto CrearReserva(int mascotaId, ReservaCreateRequest reservaCreateRequest);
         void CancelarReserva(int reservaId);
-        void EnviarMensajeAlDueno(int remitenteId, int duenoId,string mensaje);
+        void EnviarMensajeAlDueno(int remitenteId, int duenoId, NotificacionRequest request);
         List<NotificacionDto> VerNotificacionesRecibidas(int clienteId);
         List<NotificacionDto> VerNotificacionesEnviadas(int clienteId);
 

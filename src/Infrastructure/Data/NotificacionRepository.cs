@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
 
         public Notificacion GetById(int id)
         {
-            return _context.Notificaciones.Find(id);
+            return _context.Notificaciones.FirstOrDefault(n => n.Id == id);
         }
 
         public void SaveChanges()

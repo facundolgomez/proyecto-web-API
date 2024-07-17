@@ -23,7 +23,7 @@ namespace Application.Interfaces
         void CancelarReserva(int reservaId);
         GuarderiaDto CrearGuarderia(GuarderiaCreateRequest guarderiaCreateRequest);
         List<ReservaDto> ListarReservasPendientes(int guarderiaId);
-        void EnviarMensajeAlCliente(int remitenteId, int clienteId, string mensaje);
+        void EnviarMensajeAlCliente(int remitenteId, int clienteId, NotificacionRequest request);
         List<NotificacionDto> VerNotificacionesRecibidas(int duenoId);
 
         List<NotificacionDto> VerNotificacionesEnviadas(int duenoId);
